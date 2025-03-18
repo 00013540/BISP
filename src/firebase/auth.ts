@@ -6,7 +6,7 @@ import {
   updatePassword,
 } from 'firebase/auth';
 
-import { auth } from './firebase';
+import { auth } from './index.ts';
 
 export const doCreateUserWithEmailAndPassword = async (
   email: string,

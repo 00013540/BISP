@@ -2,7 +2,7 @@ import React, { useState, useContext, useEffect } from 'react';
 import { User, onAuthStateChanged } from 'firebase/auth';
 
 import { doc, getDoc } from 'firebase/firestore';
-import { db, auth } from '@/firebase/firebase.ts';
+import { db, auth } from '@/firebase';
 
 import {
   UserData,

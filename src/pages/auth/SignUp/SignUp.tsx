@@ -2,7 +2,7 @@ import { FormEvent, useState } from 'react';
 import { Navigate, Link } from 'react-router';
 import { doc, setDoc } from 'firebase/firestore';
 
-import { db } from '@/firebase/firebase.ts';
+import { db } from '@/firebase';
 import { useUser } from '@/context/user-context';
 import { doCreateUserWithEmailAndPassword } from '@/firebase/auth.ts';
 
