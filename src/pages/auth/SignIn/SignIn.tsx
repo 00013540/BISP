@@ -1,11 +1,11 @@
 import { useState, FormEvent } from 'react';
 import { Navigate, Link } from 'react-router';
 
-import { useAuth } from '@/context/auth-context';
+import { useUser } from '@/context/user-context';
 import { doSignInWithEmailAndPassword } from '@/firebase/auth.ts';
 
 const SignIn = () => {
-  const { userLoggedIn } = useAuth();
+  const { userLoggedIn } = useUser();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -13,15 +13,19 @@ const SignIn = () => {
 
   const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!isSigningIn) {
+    try {
       setIsSigningIn(true);
       await doSignInWithEmailAndPassword(email, password);
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setIsSigningIn(false);
     }
   };
 
   return (
     <div>
-      {userLoggedIn && <Navigate to={'/home'} replace={true} />}
+      {userLoggedIn && <Navigate to={'/'} replace={true} />}
 
       <main className="w-full h-screen flex self-center place-content-center place-items-center">
         <div className="w-96 text-gray-600 space-y-5 p-4 shadow-xl border rounded-xl">
@@ -73,15 +77,10 @@ const SignIn = () => {
           </form>
           <p className="text-center text-sm">
             Don't have an account?{' '}
-            <Link to={'/register'} className="hover:underline font-bold">
+            <Link to={'/auth/sign-up'} className="hover:underline font-bold">
               Sign up
             </Link>
           </p>
-          <div className="flex flex-row text-center w-full">
-            <div className="border-b-2 mb-2.5 mr-2 w-full"></div>
-            <div className="text-sm font-bold w-fit">OR</div>
-            <div className="border-b-2 mb-2.5 ml-2 w-full"></div>
-          </div>
         </div>
       </main>
     </div>

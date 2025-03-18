@@ -2,7 +2,7 @@ import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { BrowserRouter } from 'react-router';
 
-import { AuthContextProvider } from '@/context/auth-context';
+import { UserContextProvider } from '@/context/user-context';
 
 import App from './App.tsx';
 import './index.css';
@@ -10,9 +10,9 @@ import './index.css';
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <BrowserRouter>
-      <AuthContextProvider>
+      <UserContextProvider>
         <App />
-      </AuthContextProvider>
+      </UserContextProvider>
     </BrowserRouter>
   </StrictMode>
 );
