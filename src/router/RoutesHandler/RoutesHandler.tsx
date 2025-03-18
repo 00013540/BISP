@@ -1,4 +1,4 @@
-import { ReactNode, ReactElement } from 'react';
+import { ReactNode, ReactElement, Suspense } from 'react';
 import { Routes, Route } from 'react-router';
 
 import { dashboardRoutes } from '@/router/dashboard.ts';
@@ -14,7 +14,14 @@ const renderRoutes = (Layout: ReactNode, routes: BaseRoute[]) => {
         const Component = nestedRoute.component;
         if (Component) {
           renderedRoutes.push(
-            <Route path={nestedRoute.path} element={<Component />} />
+            <Route
+              path={nestedRoute.path}
+              element={
+                <Suspense fallback={<div>Loading</div>}>
+                  <Component />
+                </Suspense>
+              }
+            />
           );
         }
       });
@@ -22,7 +29,14 @@ const renderRoutes = (Layout: ReactNode, routes: BaseRoute[]) => {
       const Component = route.component;
       if (Component) {
         renderedRoutes.push(
-          <Route path={route.path} element={<Component />} />
+          <Route
+            path={route.path}
+            element={
+              <Suspense fallback={<div>Loading</div>}>
+                <Component />
+              </Suspense>
+            }
+          />
         );
       }
     }
