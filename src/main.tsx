@@ -8,11 +8,11 @@ import App from './App.tsx';
 import './fonts/font.scss';
 
 createRoot(document.getElementById('root')!).render(
-  <StrictMode>
-    <BrowserRouter>
-      <UserContextProvider>
-        <App />
-      </UserContextProvider>
-    </BrowserRouter>
-  </StrictMode>
+    <StrictMode>
+        <BrowserRouter>
+            <UserContextProvider>
+                <App />
+            </UserContextProvider>
+        </BrowserRouter>
+    </StrictMode>
 );

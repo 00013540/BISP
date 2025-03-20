@@ -1,8 +1,8 @@
 import {
-  UseQueryResult,
-  UseQueryOptions,
-  useQuery,
-  keepPreviousData,
+    UseQueryResult,
+    UseQueryOptions,
+    useQuery,
+    keepPreviousData,
 } from '@tanstack/react-query';
 import { FirebaseError } from 'firebase/app';
 
@@ -11,12 +11,12 @@ import { getUsers } from '../services';
 import { getUsersKey } from './getQueryKeys';
 
 export const useGetUsers = (
-  queryOptions?: Partial<UseQueryOptions<User[] | null, FirebaseError>>
+    queryOptions?: Partial<UseQueryOptions<User[] | null, FirebaseError>>
 ): UseQueryResult<User[] | null, FirebaseError> => {
-  return useQuery({
-    queryKey: getUsersKey(),
-    queryFn: () => getUsers(),
-    placeholderData: keepPreviousData,
-    ...queryOptions,
-  });
+    return useQuery({
+        queryKey: getUsersKey(),
+        queryFn: () => getUsers(),
+        placeholderData: keepPreviousData,
+        ...queryOptions,
+    });
 };

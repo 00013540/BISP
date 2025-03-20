@@ -20,43 +20,43 @@ import MuiAlert from './alert';
 import MuiSlider from './slider';
 
 const Overrides = (theme: Theme) => {
-  const cssBaseline = MuiCssBaseline(theme);
-  const button = MuiButton(theme);
-  const card = MuiCard(theme);
-  const chip = MuiChip(theme);
-  const helperText = MuiFormHelperText(theme);
-  const link = MuiLink(theme);
-  const textField = MuiTextField(theme);
-  const typography = MuiTypography(theme);
-  const accordionSummary = MuiAccordionSummary();
-  const paper = MuiPaper();
-  const collapse = MuiCollapse();
-  const divider = MuiDivider(theme);
-  const tooltip = MuiTooltip(theme);
-  const backdrop = MuiBackdrop();
-  const dataGrid = MuiDataGrid(theme);
-  const alert = MuiAlert();
-  const slider = MuiSlider(theme);
+    const cssBaseline = MuiCssBaseline();
+    const button = MuiButton(theme);
+    const card = MuiCard(theme);
+    const chip = MuiChip(theme);
+    const helperText = MuiFormHelperText(theme);
+    const link = MuiLink(theme);
+    const textField = MuiTextField(theme);
+    const typography = MuiTypography(theme);
+    const accordionSummary = MuiAccordionSummary();
+    const paper = MuiPaper();
+    const collapse = MuiCollapse();
+    const divider = MuiDivider(theme);
+    const tooltip = MuiTooltip(theme);
+    const backdrop = MuiBackdrop();
+    const dataGrid = MuiDataGrid(theme);
+    const alert = MuiAlert();
+    const slider = MuiSlider(theme);
 
-  return Object.assign(
-    cssBaseline,
-    button,
-    card,
-    chip,
-    helperText,
-    link,
-    textField,
-    typography,
-    accordionSummary,
-    paper,
-    collapse,
-    divider,
-    tooltip,
-    backdrop,
-    dataGrid,
-    alert,
-    slider
-  );
+    return Object.assign(
+        cssBaseline,
+        button,
+        card,
+        chip,
+        helperText,
+        link,
+        textField,
+        typography,
+        accordionSummary,
+        paper,
+        collapse,
+        divider,
+        tooltip,
+        backdrop,
+        dataGrid,
+        alert,
+        slider
+    );
 };
 
 export default Overrides;
