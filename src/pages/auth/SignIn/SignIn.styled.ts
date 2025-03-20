@@ -2,8 +2,9 @@ import { styled, Box } from '@mui/material';
 import { LoadingButton as Button } from '@mui/lab';
 
 export const WrapperStyled = styled(Box)(() => ({
-    maxWidth: '20.5rem',
+    maxWidth: '21.5rem',
     width: '100%',
+    padding: '1rem',
 }));
 
 export const FormFieldsWrapperStyled = styled(Box)(({ theme }) => ({
