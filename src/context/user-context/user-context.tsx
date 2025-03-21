@@ -2,7 +2,8 @@ import React, { useState, useContext, useEffect } from 'react';
 import { User, onAuthStateChanged } from 'firebase/auth';
 
 import { auth } from '@/firebase';
-import { useGetUser } from '@/dataAccess/hooks/users';
+import { UserData } from '@/dataAccess/types';
+import { useGetUser } from '@/dataAccess/hooks';
 
 import {
     UserContextInterface,
@@ -13,6 +14,7 @@ const UserContext = React.createContext<UserContextInterface>({
     currentUser: null,
     userLoggedIn: false,
     loading: true,
+    clearUser: () => {},
 });
 
 export const useUser = () => useContext(UserContext);
@@ -20,8 +22,9 @@ export const useUser = () => useContext(UserContext);
 export const UserContextProvider = ({ children }: UserContextProviderProps) => {
     const [userUid, setUserUid] = useState('');
     const [loading, setLoading] = useState(true);
+    const [currentUser, setCurrentUser] = useState<null | UserData>(null);
 
-    const { data: userData, refetch, isFetching } = useGetUser(userUid);
+    const { refetch, isFetching } = useGetUser(userUid);
 
     useEffect(() => {
         const unSubscribe = onAuthStateChanged(auth, initializeUser);
@@ -40,14 +43,23 @@ export const UserContextProvider = ({ children }: UserContextProviderProps) => {
 
     useEffect(() => {
         if (userUid) {
-            refetch();
+            refetch().then((data) => {
+                if (data.data) {
+                    setCurrentUser(data.data);
+                }
+            });
         }
     }, [userUid, refetch]);
 
+    const clearUser = () => {
+        setCurrentUser(null);
+    };
+
     const contextValue = {
-        currentUser: userData || null,
-        userLoggedIn: !!userData,
+        currentUser: currentUser,
+        userLoggedIn: !!currentUser,
         loading: loading || isFetching,
+        clearUser,
     };
 
     return (

@@ -6,14 +6,14 @@ import {
 } from '@tanstack/react-query';
 import { FirebaseError } from 'firebase/app';
 
-import { User } from '../../types';
+import { UserData } from '../../types';
 import { getUser } from '../../services';
 import { getUserKey } from '../getQueryKeys.ts';
 
 export const useGetUser = (
     uid: string,
-    queryOptions?: Partial<UseQueryOptions<User | null, FirebaseError>>
-): UseQueryResult<User | null, FirebaseError> => {
+    queryOptions?: Partial<UseQueryOptions<UserData | null, FirebaseError>>
+): UseQueryResult<UserData | null, FirebaseError> => {
     return useQuery({
         queryKey: getUserKey(),
         queryFn: () => getUser(uid),

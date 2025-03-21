@@ -1,6 +1,7 @@
 import { User as IUser } from '../types';
+import { DocumentReference } from 'firebase/firestore';
 
-export class User {
+export class UserConstructor {
     uid: string;
     email: string;
     firstName: string;
@@ -8,9 +9,9 @@ export class User {
     phoneNumber: string;
     photo: string;
     totalBids: number;
-    favoriteFeeds: string[];
-    myFeeds: string[];
-    myBids: string[];
+    favoriteFeeds: DocumentReference[];
+    myFeeds: DocumentReference[];
+    myBids: DocumentReference[];
 
     constructor(userData: Partial<IUser>) {
         this.uid = userData.uid || '';

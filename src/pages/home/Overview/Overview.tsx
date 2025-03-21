@@ -1,12 +1,13 @@
-import { useGetUsers } from '@/dataAccess/hooks/users/useGetUsers.ts';
+import { useUser } from '@/context/user-context';
 
 const Overview = () => {
-    const { data } = useGetUsers();
+    const { loading, currentUser } = useUser();
 
     return (
         <div>
             <h1>This is home page updated</h1>
-            <pre>{JSON.stringify(data, null, 2)}</pre>
+            <p>{JSON.stringify(loading)}</p>
+            <pre>{JSON.stringify(currentUser, null, 2)}</pre>
         </div>
     );
 };

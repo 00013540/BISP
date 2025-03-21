@@ -6,7 +6,7 @@ import { Box, Typography, FormLabel, Grid2 } from '@mui/material';
 import { getFormikError } from '@/utils';
 import { useUser } from '@/context/user-context';
 import { doCreateUserWithEmailAndPassword } from '@/firebase/auth.ts';
-import { useCreateUser } from '@/dataAccess/hooks/users';
+import { useCreateUser } from '@/dataAccess/hooks';
 import {
     CustomTextField,
     PasswordField,

@@ -1,10 +1,11 @@
 import React from 'react';
-import { User } from '@/dataAccess/types';
+import { UserData } from '@/dataAccess/types';
 
 export interface UserContextInterface {
-    currentUser: null | User;
+    currentUser: null | UserData;
     userLoggedIn: boolean;
     loading: boolean;
+    clearUser: () => void;
 }
 
 export interface UserContextProviderProps {
