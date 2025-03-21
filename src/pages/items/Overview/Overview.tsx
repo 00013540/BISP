@@ -1,4 +1,4 @@
-import { useGetUsers } from '@/dataAccess/hooks/useGetUsers.ts';
+import { useGetUsers } from '@/dataAccess/hooks/users/useGetUsers.ts';
 
 const Overview = () => {
     const { data } = useGetUsers();

@@ -1,158 +1,185 @@
-import { FormEvent, useState } from 'react';
-import { Navigate, Link } from 'react-router';
-import { doc, setDoc } from 'firebase/firestore';
+import { useState } from 'react';
+import { useFormik } from 'formik';
+import { Navigate, useNavigate } from 'react-router';
+import { Box, Typography, FormLabel, Grid2 } from '@mui/material';
 
-import { db } from '@/firebase';
+import { getFormikError } from '@/utils';
 import { useUser } from '@/context/user-context';
 import { doCreateUserWithEmailAndPassword } from '@/firebase/auth.ts';
+import { useCreateUser } from '@/dataAccess/hooks/users';
+import {
+    CustomTextField,
+    PasswordField,
+    CustomLink,
+} from '@/components/common';
 
-const SignUp = () => {
-    const [firstName, setFirstName] = useState('');
-    const [lastName, setLastName] = useState('');
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [confirmPassword, setConfirmPassword] = useState('');
-    const [isRegistering, setIsRegistering] = useState(false);
+import { defaultValues, getSignUpSchema } from './SignUp.schema.ts';
+import {
+    WrapperStyled,
+    SubmitButtonStyled,
+    FormFieldsWrapperStyled,
+} from './SignUp.styled.ts';
 
+const SignIn = () => {
+    const navigate = useNavigate();
     const { userLoggedIn } = useUser();
 
-    const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        try {
-            setIsRegistering(true);
-            const { user } = await doCreateUserWithEmailAndPassword(
-                email,
-                password
-            );
-            if (user) {
-                await setDoc(doc(db, 'Users', user.uid), {
-                    email: user.email,
-                    firstName,
-                    lastName,
+    const [errorMessage, setErrorMessage] = useState('');
+
+    const { mutate, isPending } = useCreateUser({
+        onSuccess: () => {
+            navigate('/');
+        },
+        onError: () => {
+            setErrorMessage('Something wen wrong. Please, try again later.');
+        },
+    });
+
+    const formik = useFormik({
+        initialValues: defaultValues,
+        validationSchema: getSignUpSchema(),
+
+        onSubmit: async (values, { setSubmitting }) => {
+            try {
+                const { user } = await doCreateUserWithEmailAndPassword(
+                    values.email,
+                    values.password
+                );
+                mutate({
+                    uid: user.uid,
+                    ...values,
                 });
+            } catch (err: unknown) {
+                setErrorMessage('Something went wrong');
+                console.error(err);
+            } finally {
+                setSubmitting(false);
             }
-        } catch (err) {
-            console.log(err);
-        } finally {
-            setIsRegistering(false);
-        }
-    };
+        },
+    });
 
     return (
-        <>
-            {userLoggedIn && <Navigate to={'/'} replace={true} />}
+        <WrapperStyled>
+            {userLoggedIn && !errorMessage && (
+                <Navigate to={'/'} replace={true} />
+            )}
+            <Box mb={4}>
+                <Box>
+                    <Typography
+                        variant="h2"
+                        align="center"
+                        color="text.highlight"
+                        gutterBottom
+                    >
+                        Sign up
+                    </Typography>
+                    <Typography color="text.secondary" align="center">
+                        Create Your Account!
+                    </Typography>
+                </Box>
 
-            <main className="w-full h-screen flex self-center place-content-center place-items-center">
-                <div className="w-96 text-gray-600 space-y-5 p-4 shadow-xl border rounded-xl">
-                    <div className="text-center mb-6">
-                        <div className="mt-2">
-                            <h3 className="text-gray-800 text-xl font-semibold sm:text-2xl">
-                                Create a New Account
-                            </h3>
-                        </div>
-                    </div>
-                    <form onSubmit={onSubmit} className="space-y-4">
-                        <div>
-                            <label className="text-sm text-gray-600 font-bold">
-                                First Name
-                            </label>
-                            <input
-                                type="text"
-                                required
-                                value={firstName}
-                                onChange={(e) => {
-                                    setFirstName(e.target.value);
-                                }}
-                                className="w-full mt-2 px-3 py-2 text-gray-500 bg-transparent outline-none border focus:indigo-600 shadow-sm rounded-lg transition duration-300"
-                            />
-                        </div>
+                <form onSubmit={formik.handleSubmit}>
+                    <FormFieldsWrapperStyled>
+                        <Grid2 container spacing={4}>
+                            <Grid2 size={{ xs: 12, md: 6 }}>
+                                <CustomTextField
+                                    name="firstName"
+                                    value={formik.values.firstName}
+                                    onChange={formik.handleChange}
+                                    label="First name"
+                                    placeholder="Enter your first name"
+                                    autoFocus
+                                    {...getFormikError(formik, 'firstName')}
+                                />
+                            </Grid2>
+                            <Grid2 size={{ xs: 12, md: 6 }}>
+                                <CustomTextField
+                                    name="lastName"
+                                    value={formik.values.lastName}
+                                    onChange={formik.handleChange}
+                                    label="Last name"
+                                    placeholder="Enter your last name"
+                                    {...getFormikError(formik, 'lastName')}
+                                />
+                            </Grid2>
+                            <Grid2 size={{ xs: 12, md: 6 }}>
+                                <CustomTextField
+                                    name="phoneNumber"
+                                    value={formik.values.phoneNumber}
+                                    onChange={formik.handleChange}
+                                    label="Phone number"
+                                    placeholder="+998xxxxxxxxx"
+                                    {...getFormikError(formik, 'phoneNumber')}
+                                />
+                            </Grid2>
+                            <Grid2 size={{ xs: 12, md: 6 }}>
+                                <CustomTextField
+                                    name="email"
+                                    value={formik.values.email}
+                                    onChange={formik.handleChange}
+                                    label="Email"
+                                    placeholder="Enter your email"
+                                    autoComplete="email"
+                                    {...getFormikError(formik, 'email')}
+                                />
+                            </Grid2>
+                            <Grid2 size={{ xs: 12, md: 6 }}>
+                                <PasswordField
+                                    name="password"
+                                    value={formik.values.password}
+                                    onChange={formik.handleChange}
+                                    label="Password"
+                                    placeholder="Enter your password"
+                                    {...getFormikError(formik, 'password')}
+                                />
+                            </Grid2>
+                            <Grid2 size={{ xs: 12, md: 6 }}>
+                                <PasswordField
+                                    name="passwordConfirm"
+                                    value={formik.values.passwordConfirm}
+                                    onChange={formik.handleChange}
+                                    label="Password confirm"
+                                    placeholder="Enter your password confirm"
+                                    {...getFormikError(
+                                        formik,
+                                        'passwordConfirm'
+                                    )}
+                                />
+                            </Grid2>
+                        </Grid2>
+                    </FormFieldsWrapperStyled>
 
-                        <div>
-                            <label className="text-sm text-gray-600 font-bold">
-                                Last Name
-                            </label>
-                            <input
-                                type="text"
-                                required
-                                value={lastName}
-                                onChange={(e) => {
-                                    setLastName(e.target.value);
-                                }}
-                                className="w-full mt-2 px-3 py-2 text-gray-500 bg-transparent outline-none border focus:indigo-600 shadow-sm rounded-lg transition duration-300"
-                            />
-                        </div>
-
-                        <div>
-                            <label className="text-sm text-gray-600 font-bold">
-                                Email
-                            </label>
-                            <input
-                                type="email"
-                                autoComplete="email"
-                                required
-                                value={email}
-                                onChange={(e) => {
-                                    setEmail(e.target.value);
-                                }}
-                                className="w-full mt-2 px-3 py-2 text-gray-500 bg-transparent outline-none border focus:indigo-600 shadow-sm rounded-lg transition duration-300"
-                            />
-                        </div>
-
-                        <div>
-                            <label className="text-sm text-gray-600 font-bold">
-                                Password
-                            </label>
-                            <input
-                                disabled={isRegistering}
-                                type="password"
-                                autoComplete="new-password"
-                                required
-                                value={password}
-                                onChange={(e) => {
-                                    setPassword(e.target.value);
-                                }}
-                                className="w-full mt-2 px-3 py-2 text-gray-500 bg-transparent outline-none border focus:border-indigo-600 shadow-sm rounded-lg transition duration-300"
-                            />
-                        </div>
-
-                        <div>
-                            <label className="text-sm text-gray-600 font-bold">
-                                Confirm Password
-                            </label>
-                            <input
-                                disabled={isRegistering}
-                                type="password"
-                                autoComplete="off"
-                                required
-                                value={confirmPassword}
-                                onChange={(e) => {
-                                    setConfirmPassword(e.target.value);
-                                }}
-                                className="w-full mt-2 px-3 py-2 text-gray-500 bg-transparent outline-none border focus:border-indigo-600 shadow-sm rounded-lg transition duration-300"
-                            />
-                        </div>
-
-                        <button
-                            type="submit"
-                            disabled={isRegistering}
-                            className={`w-full px-4 py-2 text-white font-medium rounded-lg ${isRegistering ? 'bg-gray-300 cursor-not-allowed' : 'bg-indigo-600 hover:bg-indigo-700 hover:shadow-xl transition duration-300'}`}
+                    {!!errorMessage && (
+                        <FormLabel
+                            error={!!errorMessage}
+                            sx={{ display: 'block', mb: 10, mt: -8 }}
                         >
-                            {isRegistering ? 'Signing Up...' : 'Sign Up'}
-                        </button>
-                        <div className="text-sm text-center">
-                            Already have an account? {'   '}
-                            <Link
-                                to={'/auth/sign-in'}
-                                className="text-center text-sm hover:underline font-bold"
-                            >
-                                Sign In
-                            </Link>
-                        </div>
-                    </form>
-                </div>
-            </main>
-        </>
+                            {errorMessage}
+                        </FormLabel>
+                    )}
+
+                    <SubmitButtonStyled
+                        fullWidth
+                        loading={formik.isSubmitting || isPending}
+                        type="submit"
+                        variant="contained"
+                    >
+                        Sign up
+                    </SubmitButtonStyled>
+                </form>
+            </Box>
+
+            <Typography color="text.secondary" align="center">
+                Already have an account?{' '}
+                <CustomLink
+                    to={`/auth/sign-in`}
+                    sx={{ display: 'inline-block', fontWeight: 400 }}
+                >
+                    Sign In
+                </CustomLink>
+            </Typography>
+        </WrapperStyled>
     );
 };
 
-export default SignUp;
+export default SignIn;

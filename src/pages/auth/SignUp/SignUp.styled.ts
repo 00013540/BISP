@@ -1,7 +1,7 @@
 import { styled, Box, Button } from '@mui/material';
 
 export const WrapperStyled = styled(Box)(() => ({
-    maxWidth: '21.5rem',
+    maxWidth: '30rem',
     width: '100%',
     padding: '1rem',
 }));

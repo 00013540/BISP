@@ -1,11 +1,10 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { User, onAuthStateChanged } from 'firebase/auth';
 
-import { doc, getDoc } from 'firebase/firestore';
-import { db, auth } from '@/firebase';
+import { auth } from '@/firebase';
+import { useGetUser } from '@/dataAccess/hooks/users';
 
 import {
-    UserData,
     UserContextInterface,
     UserContextProviderProps,
 } from './user-context.types.ts';
@@ -19,9 +18,10 @@ const UserContext = React.createContext<UserContextInterface>({
 export const useUser = () => useContext(UserContext);
 
 export const UserContextProvider = ({ children }: UserContextProviderProps) => {
-    const [currentUser, setCurrentUser] = useState<null | UserData>(null);
-    const [userLoggedIn, setUserLoggedIn] = useState(false);
+    const [userUid, setUserUid] = useState('');
     const [loading, setLoading] = useState(true);
+
+    const { data: userData, refetch, isFetching } = useGetUser(userUid);
 
     useEffect(() => {
         const unSubscribe = onAuthStateChanged(auth, initializeUser);
@@ -30,29 +30,24 @@ export const UserContextProvider = ({ children }: UserContextProviderProps) => {
 
     async function initializeUser(user: null | User) {
         try {
-            if (user) {
-                const docRef = doc(db, 'Users', user.uid);
-                const docSnap = await getDoc(docRef);
-                if (docSnap.exists()) {
-                    const { firstName, lastName } = docSnap.data();
-                    setCurrentUser({ ...user, firstName, lastName });
-                    setUserLoggedIn(true);
-                }
-            } else {
-                setCurrentUser(null);
-                setUserLoggedIn(false);
-            }
+            if (user) setUserUid(user.uid);
         } catch (err) {
-            console.log(err);
+            console.error(err);
         } finally {
             setLoading(false);
         }
     }
 
+    useEffect(() => {
+        if (userUid) {
+            refetch();
+        }
+    }, [userUid, refetch]);
+
     const contextValue = {
-        currentUser,
-        userLoggedIn,
-        loading,
+        currentUser: userData || null,
+        userLoggedIn: !!userData,
+        loading: loading || isFetching,
     };
 
     return (

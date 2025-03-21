@@ -7,7 +7,7 @@ export const getUsers = async (): Promise<User[]> => {
     const querySnapshot = await getDocs(collection(db, 'Users'));
 
     return querySnapshot.docs.map((doc) => ({
-        id: doc.id,
+        uid: doc.id,
         ...doc.data(),
     })) as User[];
 };

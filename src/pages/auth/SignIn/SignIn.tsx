@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { useFormik } from 'formik';
 import { Navigate, useNavigate } from 'react-router';
-import { Helmet } from 'react-helmet';
 import { Box, Typography, FormLabel } from '@mui/material';
 
 import { getFormikError } from '@/utils';
@@ -49,7 +48,6 @@ const SignIn = () => {
     return (
         <WrapperStyled>
             {userLoggedIn && <Navigate to={'/'} replace={true} />}
-            <Helmet title="Sign In" />
             <Box mb={4}>
                 <Box>
                     <Typography
