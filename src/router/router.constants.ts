@@ -2,10 +2,12 @@ export const routes = {
     HOME: {
         id: 'home',
         path: '/',
+        title: 'Feeds',
     },
-    ITEMS: {
-        id: 'items',
-        path: '/items',
+    LOGOUT: {
+        id: 'logout',
+        path: '/auth/sign-in',
+        title: 'Logout',
     },
     AUTH: {
         id: 'auth',

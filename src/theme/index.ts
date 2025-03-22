@@ -5,6 +5,8 @@ import overrides from './overrides';
 import generateShadows from './shadows';
 import generatePalette from './palette';
 
+export * from './constants';
+
 declare module '@mui/material/styles' {
     interface Palette {
         gray: Palette['primary'];

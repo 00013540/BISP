@@ -1,1 +1,1 @@
-export { default as DashboardLayout } from './DashboardLayout.tsx';
+export { default as DashboardLayout } from './DashboardLayout';

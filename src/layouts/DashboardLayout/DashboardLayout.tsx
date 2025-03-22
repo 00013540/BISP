@@ -1,27 +1,48 @@
-import { NavLink, Outlet } from 'react-router';
-import { doSignOut } from '@/firebase/auth.ts';
+import type { FC, PropsWithChildren } from 'react';
+import { useState } from 'react';
+import { Backdrop } from '@mui/material';
+
 import { useUser } from '@/context/user-context';
+import { LAYOUT_BACKDROP_Z_INDEX } from '@/theme';
+import { useIsTabletOrMobile } from '@/hooks';
+import { Loader } from '@/components/common';
 
-const DashboardLayout = () => {
-    const { clearUser } = useUser();
+import { Header, PrimarySidebar } from './components';
+import { LayoutContentContainer } from './DashboardLayout.styled';
 
-    const handleLogout = () => {
-        doSignOut();
-        clearUser();
+const DashboardLayout: FC<PropsWithChildren> = ({ children }) => {
+    const isTabletOrMobileView = useIsTabletOrMobile();
+    const { loading } = useUser();
+
+    const [isPrimarySidebarOpen, setIsPrimarySidebarOpen] = useState(false);
+
+    const closeSidebars = () => {
+        setIsPrimarySidebarOpen(false);
     };
 
+    if (loading) return <Loader size="6rem" centered />;
+
     return (
-        <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                <NavLink to="/">Home</NavLink>
-                <NavLink to="/items">Items</NavLink>
-                <NavLink to="/auth/sign-in">Sign in</NavLink>
-                <NavLink to="/auth/sign-up">Sign up</NavLink>
-                <button onClick={handleLogout}>Log out</button>
-            </div>
-            <h1>This is Dashboard layout</h1>
-            <Outlet />
-        </div>
+        <>
+            <PrimarySidebar
+                isOpen={isPrimarySidebarOpen}
+                closeSidebars={closeSidebars}
+            />
+            <Backdrop
+                sx={{ zIndex: LAYOUT_BACKDROP_Z_INDEX }}
+                open={isPrimarySidebarOpen}
+                onClick={closeSidebars}
+            />
+
+            <LayoutContentContainer>{children}</LayoutContentContainer>
+
+            {isTabletOrMobileView && (
+                <Header
+                    isOpen={isPrimarySidebarOpen}
+                    setIsOpen={setIsPrimarySidebarOpen}
+                />
+            )}
+        </>
     );
 };
 

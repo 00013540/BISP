@@ -1,2 +1,10 @@
 export { default as ErrorSVG } from './ErrorSVG.tsx';
 export { default as SuccessSVG } from './SuccessSVG.tsx';
+export { default as CloseSVG } from './CloseSVG.tsx';
+export { default as HamburgerSVG } from './HamburgerSVG.tsx';
+export { default as ChevronDownSVG } from './ChevronDownSVG.tsx';
+export { default as ChevronUpSVG } from './ChevronUpSVG.tsx';
+export { default as ChevronLeftSVG } from './ChevronLeftSVG.tsx';
+export { default as ChevronRightSVG } from './ChevronRightSVG.tsx';
+export { default as OverviewSVG } from './OverviewSVG.tsx';
+export { default as LogoutSVG } from './LogoutSVG.tsx';

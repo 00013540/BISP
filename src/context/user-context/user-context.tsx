@@ -1,4 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react';
+import { useNavigate } from 'react-router';
 import { User, onAuthStateChanged } from 'firebase/auth';
 
 import { auth } from '@/firebase';
@@ -20,26 +21,36 @@ const UserContext = React.createContext<UserContextInterface>({
 export const useUser = () => useContext(UserContext);
 
 export const UserContextProvider = ({ children }: UserContextProviderProps) => {
+    const navigate = useNavigate();
+
     const [userUid, setUserUid] = useState('');
     const [loading, setLoading] = useState(true);
     const [currentUser, setCurrentUser] = useState<null | UserData>(null);
 
     const { refetch, isFetching } = useGetUser(userUid);
 
-    useEffect(() => {
-        const unSubscribe = onAuthStateChanged(auth, initializeUser);
-        return unSubscribe;
-    }, []);
+    const clearUser = () => {
+        setUserUid('');
+        setCurrentUser(null);
+
+        navigate('/auth/sign-in');
+    };
 
     async function initializeUser(user: null | User) {
         try {
             if (user) setUserUid(user.uid);
+            else clearUser();
         } catch (err) {
             console.error(err);
         } finally {
             setLoading(false);
         }
     }
+
+    useEffect(() => {
+        const unSubscribe = onAuthStateChanged(auth, initializeUser);
+        return unSubscribe;
+    }, []);
 
     useEffect(() => {
         if (userUid) {
@@ -50,10 +61,6 @@ export const UserContextProvider = ({ children }: UserContextProviderProps) => {
             });
         }
     }, [userUid, refetch]);
-
-    const clearUser = () => {
-        setCurrentUser(null);
-    };
 
     const contextValue = {
         currentUser: currentUser,

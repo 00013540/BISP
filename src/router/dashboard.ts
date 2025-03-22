@@ -1,23 +1,27 @@
 import { lazy } from 'react';
 
+import { OverviewSVG, LogoutSVG } from '@/components/icons';
+
 import { BaseRoute } from './router.types.ts';
 import { routes } from './router.constants.ts';
 
 const HomeOverview = lazy(() => import('@/pages/home/Overview/Overview.tsx'));
-const ItemsOverview = lazy(() => import('@/pages/items/Overview/Overview.tsx'));
 
-const { HOME, ITEMS } = routes;
+const { HOME, LOGOUT } = routes;
 
 const homeRoute: BaseRoute = {
     id: HOME.id,
     path: HOME.path,
+    title: HOME.title,
+    icon: OverviewSVG,
     component: HomeOverview,
 };
 
-const itemsRoute: BaseRoute = {
-    id: ITEMS.id,
-    path: ITEMS.path,
-    component: ItemsOverview,
+const logOutRoute: BaseRoute = {
+    id: LOGOUT.id,
+    path: LOGOUT.path,
+    title: LOGOUT.title,
+    icon: LogoutSVG,
 };
 
-export const dashboardRoutes = [homeRoute, itemsRoute];
+export const dashboardRoutes = [homeRoute, logOutRoute];

@@ -1,6 +1,7 @@
 import { type MouseEvent, useState } from 'react';
 import { Stack, Typography, MenuItem } from '@mui/material';
-import { ChevronRight } from '@mui/icons-material';
+
+import { ChevronRightSVG } from '@/components/icons';
 
 import {
     StyledInputWrapper,
@@ -56,7 +57,7 @@ const RowsPerPageSelector = ({
             >
                 <StyledButton open={open}>
                     <span>{perPage}</span>
-                    <ChevronRight height="8px" width="8px" />
+                    <ChevronRightSVG height="8px" width="8px" />
                 </StyledButton>
             </StyledInputWrapper>
             <StyledMenuWrapper

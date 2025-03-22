@@ -1,7 +1,8 @@
 import { ChangeEvent, KeyboardEvent } from 'react';
 import { useState, useEffect } from 'react';
 import { Typography } from '@mui/material';
-import { ChevronLeft, ChevronRight } from '@mui/icons-material';
+
+import { ChevronLeftSVG, ChevronRightSVG } from '@/components/icons';
 
 import {
     WrapperStyled,
@@ -69,7 +70,7 @@ const PageSelector = ({ page, pageCount, onChange }: PageSelectorProps) => {
                 aria-disabled={!hasPrevPage}
                 disabled={!hasPrevPage}
             >
-                <ChevronLeft />
+                <ChevronLeftSVG />
             </IconButtonStyled>
 
             <InnerWrapperStyled>
@@ -94,7 +95,7 @@ const PageSelector = ({ page, pageCount, onChange }: PageSelectorProps) => {
                 aria-disabled={!hasNextPage}
                 disabled={!hasNextPage}
             >
-                <ChevronRight />
+                <ChevronRightSVG />
             </IconButtonStyled>
         </WrapperStyled>
     );

@@ -1,8 +1,10 @@
 import type { ComponentType } from 'react';
 
-interface RawRoute {
+export interface RawRoute {
     id: string;
     path: string;
+    title?: string;
+    hideInSidebar?: boolean;
     component?: ComponentType;
     icon?: ComponentType;
 }
