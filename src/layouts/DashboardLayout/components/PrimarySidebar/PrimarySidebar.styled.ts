@@ -79,6 +79,7 @@ export const ListItemButton = styled(MuiListItemButton)(({ theme }) => ({
             color: theme.palette.primary['6'],
         },
         '& .MuiListItemIcon-root svg': {
+            fill: theme.palette.primary['6'],
             stroke: theme.palette.primary['6'],
         },
     },
@@ -90,6 +91,7 @@ export const ListItemButton = styled(MuiListItemButton)(({ theme }) => ({
             color: theme.palette.primary['6'],
         },
         '& .MuiListItemIcon-root svg': {
+            fill: theme.palette.primary['6'],
             stroke: theme.palette.primary['6'],
         },
     },
@@ -101,6 +103,7 @@ export const ListItemButton = styled(MuiListItemButton)(({ theme }) => ({
             color: theme.palette.primary['7'],
         },
         '& .MuiListItemIcon-root svg': {
+            fill: theme.palette.primary['7'],
             stroke: theme.palette.primary['7'],
         },
     },

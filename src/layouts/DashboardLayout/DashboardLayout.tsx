@@ -1,5 +1,5 @@
-import type { FC, PropsWithChildren } from 'react';
 import { useState } from 'react';
+import { Outlet } from 'react-router';
 import { Backdrop } from '@mui/material';
 
 import { useUser } from '@/context/user-context';
@@ -10,7 +10,7 @@ import { Loader } from '@/components/common';
 import { Header, PrimarySidebar } from './components';
 import { LayoutContentContainer } from './DashboardLayout.styled';
 
-const DashboardLayout: FC<PropsWithChildren> = ({ children }) => {
+const DashboardLayout = () => {
     const isTabletOrMobileView = useIsTabletOrMobile();
     const { loading } = useUser();
 
@@ -34,7 +34,9 @@ const DashboardLayout: FC<PropsWithChildren> = ({ children }) => {
                 onClick={closeSidebars}
             />
 
-            <LayoutContentContainer>{children}</LayoutContentContainer>
+            <LayoutContentContainer>
+                <Outlet />
+            </LayoutContentContainer>
 
             {isTabletOrMobileView && (
                 <Header

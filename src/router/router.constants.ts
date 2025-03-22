@@ -4,6 +4,11 @@ export const routes = {
         path: '/',
         title: 'Feeds',
     },
+    MY_FEEDS: {
+        id: 'my_feeds',
+        path: '/my-feeds',
+        title: 'My Feeds',
+    },
     LOGOUT: {
         id: 'logout',
         path: '/auth/sign-in',

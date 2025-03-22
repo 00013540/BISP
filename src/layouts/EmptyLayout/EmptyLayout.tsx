@@ -1,11 +1,12 @@
 import { Outlet } from 'react-router';
 
+import { WrapperStyled } from './EmptyLayout.styled.ts';
+
 const EmptyLayout = () => {
     return (
-        <div>
-            <h1>This is Empty Layout</h1>
+        <WrapperStyled>
             <Outlet />
-        </div>
+        </WrapperStyled>
     );
 };
 
