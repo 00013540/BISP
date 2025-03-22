@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useFormik } from 'formik';
 import { Navigate, useNavigate } from 'react-router';
-import { Box, Typography, FormLabel, Grid2 } from '@mui/material';
+import { Box, Typography, FormLabel, Button, Grid2 } from '@mui/material';
 
 import { getFormikError } from '@/utils';
 import { useUser } from '@/context/user-context';
@@ -14,11 +14,7 @@ import {
 } from '@/components/common';
 
 import { defaultValues, getSignUpSchema } from './SignUp.schema.ts';
-import {
-    WrapperStyled,
-    SubmitButtonStyled,
-    FormFieldsWrapperStyled,
-} from './SignUp.styled.ts';
+import { WrapperStyled, FormFieldsWrapperStyled } from './SignUp.styled.ts';
 
 const SignIn = () => {
     const navigate = useNavigate();
@@ -63,7 +59,7 @@ const SignIn = () => {
             {userLoggedIn && !errorMessage && (
                 <Navigate to={'/'} replace={true} />
             )}
-            <Box mb={4}>
+            <Box mb={6}>
                 <Box>
                     <Typography
                         variant="h2"
@@ -158,14 +154,14 @@ const SignIn = () => {
                         </FormLabel>
                     )}
 
-                    <SubmitButtonStyled
+                    <Button
                         fullWidth
                         loading={formik.isSubmitting || isPending}
                         type="submit"
                         variant="contained"
                     >
                         Sign up
-                    </SubmitButtonStyled>
+                    </Button>
                 </form>
             </Box>
 

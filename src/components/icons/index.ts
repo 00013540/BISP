@@ -8,3 +8,4 @@ export { default as ChevronLeftSVG } from './ChevronLeftSVG.tsx';
 export { default as ChevronRightSVG } from './ChevronRightSVG.tsx';
 export { default as OverviewSVG } from './OverviewSVG.tsx';
 export { default as LogoutSVG } from './LogoutSVG.tsx';
+export { default as MailSVG } from './MailSVG.tsx';

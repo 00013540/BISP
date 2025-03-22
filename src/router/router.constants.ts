@@ -21,4 +21,8 @@ export const routes = {
         id: 'auth_sign_up',
         path: '/auth/sign-up',
     },
+    RESET_PASSWORD: {
+        id: 'auth_reset_password',
+        path: '/auth/reset-password',
+    },
 };

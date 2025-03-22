@@ -106,7 +106,7 @@ const SignIn = () => {
                     </SubmitButtonStyled>
                     <CustomLink
                         sx={{ fontWeight: 400, justifyContent: 'center' }}
-                        to={`/reset-password`}
+                        to="/auth/reset-password"
                     >
                         Forgot password?
                     </CustomLink>
@@ -116,7 +116,7 @@ const SignIn = () => {
             <Typography color="text.secondary" align="center">
                 Don't have an account?{' '}
                 <CustomLink
-                    to={`/auth/sign-up`}
+                    to="/auth/sign-up"
                     sx={{ display: 'inline-block', fontWeight: 400 }}
                 >
                     Sign Up
