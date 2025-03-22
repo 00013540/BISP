@@ -26,7 +26,9 @@ export const getItems = async (): Promise<ItemData[]> => {
                             firstName: participantData?.firstName || '',
                             lastName: participantData?.lastName || '',
                             phoneNumber: participantData?.phoneNumber || '',
-                            photo: participantData?.photo || '',
+                            image: participantData?.image || '',
+                            imageStoragePath:
+                                participantData?.imageStoragePath || '',
                         },
                         placedBid: participant.placedBid,
                     };
@@ -39,7 +41,8 @@ export const getItems = async (): Promise<ItemData[]> => {
                 uid: itemSnap.id,
                 title: itemData.title,
                 description: itemData.description,
-                photo: itemData.photo,
+                image: itemData.image,
+                imageStoragePath: itemData.imageStoragePath,
                 category: itemData.category,
                 ownerUid: itemData.ownerUid,
                 status: itemData.status,

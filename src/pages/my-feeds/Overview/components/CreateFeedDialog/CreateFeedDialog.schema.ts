@@ -18,17 +18,17 @@ export const getCreateFeedDialogSchema = () => {
             .string()
             .label('Category')
             .required('Category is a required field'),
-        photo: yup
+        image: yup
             .string()
-            .label('Photo')
-            .required('Photo is a required field'),
+            .label('Image')
+            .required('Image is a required field'),
     });
 };
 
 export const defaultValues = {
     title: '',
     description: '',
-    photo: '',
+    image: '',
     address: '',
     category: '',
 };

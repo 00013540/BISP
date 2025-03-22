@@ -84,6 +84,7 @@ const CustomImageUploader = ({
             <LabelStyled
                 htmlFor="fileInput"
                 preview={preview}
+                error={error}
                 sx={{
                     height,
                     width,

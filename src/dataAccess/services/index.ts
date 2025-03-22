@@ -5,3 +5,5 @@ export * from './getItems.ts';
 export * from './getItem.ts';
 export * from './createCategory.ts';
 export * from './getCategories.ts';
+export * from './imageUpload.ts';
+export * from './imageUpdate.ts';

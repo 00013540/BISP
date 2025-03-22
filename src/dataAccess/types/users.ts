@@ -5,7 +5,8 @@ interface ItemData {
     uid: string;
     title: string;
     description: string;
-    photo: string;
+    image: string;
+    imageStoragePath: string;
     status: ItemStatus;
     address: string;
 }
@@ -16,7 +17,8 @@ export interface User {
     firstName: string;
     lastName: string;
     phoneNumber: string;
-    photo: string;
+    image: string;
+    imageStoragePath: string;
     totalBids: number;
     favoriteFeeds: DocumentReference[];
     myFeeds: DocumentReference[];
@@ -29,7 +31,8 @@ export interface UserData {
     firstName: string;
     lastName: string;
     phoneNumber: string;
-    photo: string;
+    image: string;
+    imageStoragePath: string;
     totalBids: number;
     favoriteFeeds: ItemData[];
     myFeeds: ItemData[];

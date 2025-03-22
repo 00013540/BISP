@@ -5,18 +5,25 @@ export const FileInputStyled = styled('input')(() => ({
 }));
 
 export const LabelStyled = styled('label', {
-    shouldForwardProp: (prop: string) => prop !== 'preview',
-})<{ preview: null | string }>(({ theme, preview }) => ({
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderRadius: '8px',
-    cursor: 'pointer',
-    overflow: 'hidden',
-    position: 'relative',
-    backgroundColor: theme.palette.gray['4'],
-    border: !preview ? `1px dashed ${theme.palette.gray['5']}` : 'none',
-}));
+    shouldForwardProp: (prop: string) => prop !== 'preview' && prop !== 'error',
+})<{ preview: null | string; error?: boolean }>(
+    ({ theme, preview, error }) => ({
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: '8px',
+        cursor: 'pointer',
+        overflow: 'hidden',
+        position: 'relative',
+        backgroundColor: theme.palette.gray['4'],
+        border:
+            !preview && !error
+                ? `1px dashed ${theme.palette.gray['5']}`
+                : !preview && error
+                  ? `1px dashed ${theme.palette.error.main}`
+                  : 'none',
+    })
+);
 
 export const ImageStyled = styled('img')(() => ({
     height: '100%',

@@ -4,7 +4,8 @@ import { FieldValue } from 'firebase/firestore';
 export class ItemConstructor {
     title: string;
     description: string;
-    photo: string;
+    image: string;
+    imageStoragePath: string;
     category: string;
     ownerUid: string;
     status: ItemStatus;
@@ -17,7 +18,8 @@ export class ItemConstructor {
     constructor(userData: IItem) {
         this.title = userData.title;
         this.description = userData.description;
-        this.photo = userData.photo;
+        this.image = userData.image;
+        this.imageStoragePath = userData.imageStoragePath;
         this.category = userData.category;
         this.ownerUid = userData.ownerUid;
         this.status = userData.status;

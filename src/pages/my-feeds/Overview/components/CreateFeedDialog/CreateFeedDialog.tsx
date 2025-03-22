@@ -1,4 +1,4 @@
-import { Grid2, Button } from '@mui/material';
+import { Grid2, Button, Snackbar, Alert } from '@mui/material';
 import { useFormik } from 'formik';
 
 import { getFormikError } from '@/utils';
@@ -16,11 +16,19 @@ import {
 } from './CreateFeedDialog.schema.ts';
 import { useGetCategories } from '@/dataAccess/hooks';
 import { useState } from 'react';
+import { useImageUpload } from '@/dataAccess/hooks/images';
+import { useCreateItem } from '@/dataAccess/hooks/items/useCreateItem.ts';
+import { useUser } from '@/context/user-context';
 
 const CreateFeedDialog = ({ isOpen, setIsOpen }: CreateFeedDialogProps) => {
+    const [openSuccessAlert, setOpenSuccessAlert] = useState(false);
     const [uploadedImage, setUploadedImage] = useState<null | string | File>(
         null
     );
+
+    const { currentUser } = useUser();
+    const { isPending: isPendingImage, mutate: mutateImage } = useImageUpload();
+    const { isPending: isPendingItem, mutate: mutateItem } = useCreateItem();
 
     const { data } = useGetCategories();
     const categories =
@@ -29,21 +37,6 @@ const CreateFeedDialog = ({ isOpen, setIsOpen }: CreateFeedDialogProps) => {
             value: category.name,
         })) || [];
 
-    const formik = useFormik({
-        initialValues: defaultValues,
-        validationSchema: getCreateFeedDialogSchema(),
-
-        onSubmit: async (values, { setSubmitting }) => {
-            try {
-                console.log(values);
-            } catch (err: unknown) {
-                console.error(err);
-            } finally {
-                setSubmitting(false);
-            }
-        },
-    });
-
     const handleClose = () => {
         setIsOpen(false);
         setUploadedImage(null);
@@ -51,78 +44,140 @@ const CreateFeedDialog = ({ isOpen, setIsOpen }: CreateFeedDialogProps) => {
     };
 
     const handleFileChange = (value: string) => {
-        if (value) formik.setFieldValue('photo', 'Uploaded');
-        else formik.setFieldValue('photo', '');
+        if (value) formik.setFieldValue('image', 'Uploaded');
+        else formik.setFieldValue('image', '');
     };
 
+    const formik = useFormik({
+        initialValues: defaultValues,
+        validationSchema: getCreateFeedDialogSchema(),
+
+        onSubmit: async (values, { setSubmitting }) => {
+            mutateImage(uploadedImage as File, {
+                onSuccess: ({ url, path }) => {
+                    mutateItem(
+                        {
+                            title: values.title,
+                            description: values.description,
+                            address: values.address,
+                            image: url,
+                            imageStoragePath: path,
+                            category: values.category,
+                            ownerUid: currentUser?.uid || '',
+                        },
+                        {
+                            onSuccess: () => {
+                                setSubmitting(false);
+                                handleClose();
+                                setOpenSuccessAlert(true);
+                            },
+                            onError: () => {
+                                setSubmitting(false);
+                            },
+                        }
+                    );
+                },
+                onError: () => {
+                    setSubmitting(false);
+                },
+            });
+        },
+    });
+
+    const isSubmittingForm =
+        isPendingImage || isPendingItem || formik.isSubmitting;
+
     return (
-        <CommonDialog
-            isHidden={false}
-            open={isOpen}
-            onClose={handleClose}
-            title="Create a New Feed"
-        >
-            <form onSubmit={formik.handleSubmit}>
-                <CustomTextField
-                    name="title"
-                    value={formik.values.title}
-                    onChange={formik.handleChange}
-                    label="Title"
-                    sx={{ mb: 4 }}
-                    {...getFormikError(formik, 'title')}
-                />
-                <CustomTextField
-                    name="description"
-                    value={formik.values.description}
-                    onChange={formik.handleChange}
-                    label="Description"
-                    sx={{ mb: 4 }}
-                    {...getFormikError(formik, 'description')}
-                />
-                <CustomTextField
-                    name="address"
-                    value={formik.values.address}
-                    onChange={formik.handleChange}
-                    label="Address"
-                    sx={{ mb: 4 }}
-                    {...getFormikError(formik, 'address')}
-                />
-                <CustomSelect
-                    name="category"
-                    label="Category"
-                    value={formik.values.category}
-                    onChange={formik.handleChange}
-                    items={categories}
-                    sx={{ mb: 4 }}
-                    {...getFormikError(formik, 'category')}
-                />
-                <CustomImageUploader
-                    label="Upload photo of item"
-                    value={uploadedImage}
-                    setValue={setUploadedImage}
-                    setFormikValue={handleFileChange}
-                    error={!!formik.errors.photo && formik.touched.photo}
-                    helperText={formik.errors.photo}
-                />
-                <Grid2 container spacing={4}>
-                    <Grid2 size={{ xs: 12, md: 6 }}>
-                        <Button
-                            fullWidth
-                            variant="outlined"
-                            type="button"
-                            onClick={handleClose}
-                        >
-                            Close
-                        </Button>
+        <>
+            <CommonDialog
+                isHidden={false}
+                open={isOpen}
+                onClose={handleClose}
+                isSubmitting={isSubmittingForm}
+                title="Create a New Feed"
+            >
+                <form onSubmit={formik.handleSubmit}>
+                    <CustomTextField
+                        name="title"
+                        value={formik.values.title}
+                        onChange={formik.handleChange}
+                        label="Title"
+                        sx={{ mb: 4 }}
+                        {...getFormikError(formik, 'title')}
+                    />
+                    <CustomTextField
+                        name="description"
+                        value={formik.values.description}
+                        onChange={formik.handleChange}
+                        label="Description"
+                        sx={{ mb: 4 }}
+                        {...getFormikError(formik, 'description')}
+                    />
+                    <CustomTextField
+                        name="address"
+                        value={formik.values.address}
+                        onChange={formik.handleChange}
+                        label="Address"
+                        sx={{ mb: 4 }}
+                        {...getFormikError(formik, 'address')}
+                    />
+                    <CustomSelect
+                        name="category"
+                        label="Category"
+                        value={formik.values.category}
+                        onChange={formik.handleChange}
+                        items={categories}
+                        sx={{ mb: 4 }}
+                        {...getFormikError(formik, 'category')}
+                    />
+                    <CustomImageUploader
+                        label="Upload image of item"
+                        value={uploadedImage}
+                        setValue={setUploadedImage}
+                        setFormikValue={handleFileChange}
+                        error={!!formik.errors.image && formik.touched.image}
+                        helperText={formik.errors.image}
+                        mb={4}
+                    />
+                    <Grid2 container spacing={4}>
+                        <Grid2 size={{ xs: 12, md: 6 }}>
+                            <Button
+                                fullWidth
+                                variant="outlined"
+                                type="button"
+                                onClick={handleClose}
+                            >
+                                Close
+                            </Button>
+                        </Grid2>
+                        <Grid2 size={{ xs: 12, md: 6 }}>
+                            <Button
+                                fullWidth
+                                loading={isSubmittingForm}
+                                variant="contained"
+                                type="submit"
+                            >
+                                Create
+                            </Button>
+                        </Grid2>
                     </Grid2>
-                    <Grid2 size={{ xs: 12, md: 6 }}>
-                        <Button fullWidth variant="contained" type="submit">
-                            Create
-                        </Button>
-                    </Grid2>
-                </Grid2>
-            </form>
-        </CommonDialog>
+                </form>
+            </CommonDialog>
+            <Snackbar
+                open={openSuccessAlert}
+                autoHideDuration={4000}
+                onClose={() => setOpenSuccessAlert(false)}
+                anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+            >
+                <Alert
+                    onClose={() => setOpenSuccessAlert(false)}
+                    severity="success"
+                    variant="filled"
+                >
+                    A new feed created successfully!
+                </Alert>
+            </Snackbar>
+        </>
     );
 };
 

@@ -11,7 +11,6 @@ export const createItem = async (itemData: CreateItemData) => {
         ...itemData,
         status: ItemStatus.NEW,
         participants: [],
-        address: '',
         duration: 0,
         type: ItemType.FIRST_BID,
         releasedAt: serverTimestamp(),

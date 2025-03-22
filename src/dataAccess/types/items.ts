@@ -6,7 +6,8 @@ interface UserData {
     firstName: string;
     lastName: string;
     phoneNumber: string;
-    photo: string;
+    image: string;
+    imageStoragePath: string;
 }
 
 interface ParticipantData {
@@ -35,7 +36,8 @@ export interface IParticipant {
 export interface Item {
     title: string;
     description: string;
-    photo: string;
+    image: string;
+    imageStoragePath: string;
     category: string;
     ownerUid: string;
     status: ItemStatus;
@@ -50,7 +52,8 @@ export interface ItemData {
     uid: string;
     title: string;
     description: string;
-    photo: string;
+    image: string;
+    imageStoragePath: string;
     category: string;
     ownerUid: string;
     status: ItemStatus;
@@ -64,7 +67,9 @@ export interface ItemData {
 export interface CreateItemData {
     title: string;
     description: string;
-    photo: string;
+    address: string;
+    image: string;
+    imageStoragePath: string;
     category: string;
     ownerUid: string;
 }

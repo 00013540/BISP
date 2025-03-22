@@ -12,4 +12,5 @@ export type CommonDialogProps = {
     open?: boolean;
     titleProps?: TypographyProps;
     sxTitleContainer?: SxProps<Theme>;
+    isSubmitting?: boolean;
 };

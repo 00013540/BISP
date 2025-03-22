@@ -3,7 +3,8 @@ const Alert = () => {
         MuiAlert: {
             styleOverrides: {
                 root: {
-                    color: 'rgba(0, 0, 0, 0.45)',
+                    color: '#fff',
+                    fontSize: '0.875rem',
                 },
             },
             variants: [

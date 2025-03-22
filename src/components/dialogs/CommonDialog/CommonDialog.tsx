@@ -21,6 +21,7 @@ const CommonDialog: FC<CommonDialogProps> = ({
     HeaderActionSlot,
     open = true,
     persistent = false,
+    isSubmitting = false,
     titleProps,
     sxTitleContainer = {},
     isHidden,
@@ -43,7 +44,11 @@ const CommonDialog: FC<CommonDialogProps> = ({
             open={open}
             fullWidth
             sx={paperStyles}
-            onClose={handleClose}
+            onClose={() => {
+                if (!isSubmitting) {
+                    handleClose();
+                }
+            }}
         >
             <DialogTitleStyled>
                 <DialogTitleInnerStyled sx={sxTitleContainer}>

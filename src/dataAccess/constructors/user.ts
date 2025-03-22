@@ -7,7 +7,8 @@ export class UserConstructor {
     firstName: string;
     lastName: string;
     phoneNumber: string;
-    photo: string;
+    image: string;
+    imageStoragePath: string;
     totalBids: number;
     favoriteFeeds: DocumentReference[];
     myFeeds: DocumentReference[];
@@ -19,7 +20,8 @@ export class UserConstructor {
         this.firstName = userData.firstName || '';
         this.lastName = userData.lastName || '';
         this.phoneNumber = userData.phoneNumber || '';
-        this.photo = userData.photo || '';
+        this.image = userData.image || '';
+        this.imageStoragePath = userData.imageStoragePath || '';
         this.totalBids = userData.totalBids || 20;
         this.favoriteFeeds = userData.favoriteFeeds || [];
         this.myFeeds = userData.myFeeds || [];
