@@ -1,3 +1,3 @@
-export * from './useImageDelete.ts';
-export * from './useImageUpload.ts';
-export * from './useImageUpdate.ts';
+export * from './useDeleteImage.ts';
+export * from './useCreateImage.ts';
+export * from './useUpdateImage.ts';

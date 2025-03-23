@@ -19,6 +19,8 @@ const CustomCard = ({
     image,
     status,
     imageStoragePath,
+    category,
+    ownerUid,
     onDelete,
     onUpdate,
     onActivate,
@@ -31,7 +33,16 @@ const CustomCard = ({
 
     const handleUpdate = () => {
         if (onUpdate) {
-            onUpdate(uid);
+            onUpdate({
+                uid,
+                title,
+                description,
+                address,
+                image,
+                imageStoragePath,
+                category,
+                ownerUid,
+            });
         }
     };
 

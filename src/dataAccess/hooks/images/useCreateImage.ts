@@ -4,16 +4,16 @@ import {
     useMutation,
 } from '@tanstack/react-query';
 import { FirebaseError } from 'firebase/app';
-import { imageUpload } from '../../services';
+import { createImage } from '../../services';
 import { ImageUploadResponse } from '../../types';
 
-export const useImageUpload = (
+export const useCreateImage = (
     mutationOptions?: Partial<
         UseMutationOptions<ImageUploadResponse, FirebaseError, File>
     >
 ): UseMutationResult<ImageUploadResponse, FirebaseError, File> => {
     return useMutation({
-        mutationFn: imageUpload,
+        mutationFn: createImage,
         ...mutationOptions,
     });
 };

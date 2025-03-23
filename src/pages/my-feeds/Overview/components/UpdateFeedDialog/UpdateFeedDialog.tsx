@@ -1,10 +1,9 @@
 import { useFormik } from 'formik';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Grid2, Button, Snackbar, Alert } from '@mui/material';
 
 import { getFormikError } from '@/utils';
 import { CommonDialog } from '@/components/dialogs';
-import { useUser } from '@/context/user-context';
 import {
     CustomTextField,
     CustomSelect,
@@ -12,25 +11,28 @@ import {
 } from '@/components/common';
 import {
     useGetCategories,
-    useCreateItem,
-    useCreateImage,
+    useUpdateImage,
+    useUpdateItem,
 } from '@/dataAccess/hooks';
 
-import { CreateFeedDialogProps } from './CreateFeedDialog.types.ts';
+import { UpdateFeedDialogProps } from './UpdateFeedDialog.types.ts';
 import {
     defaultValues,
-    getCreateFeedDialogSchema,
-} from './CreateFeedDialog.schema.ts';
+    getUpdateFeedDialogSchema,
+} from './UpdateFeedDialog.schema.ts';
 
-const CreateFeedDialog = ({ isOpen, setIsOpen }: CreateFeedDialogProps) => {
+const UpdateFeedDialog = ({
+    isOpen,
+    setIsOpen,
+    updateData,
+}: UpdateFeedDialogProps) => {
     const [openSuccessAlert, setOpenSuccessAlert] = useState(false);
     const [uploadedImage, setUploadedImage] = useState<null | string | File>(
         null
     );
 
-    const { currentUser } = useUser();
-    const { isPending: isPendingImage, mutate: mutateImage } = useCreateImage();
-    const { isPending: isPendingItem, mutate: mutateItem } = useCreateItem();
+    const { isPending: isPendingImage, mutate: mutateImage } = useUpdateImage();
+    const { isPending: isPendingItem, mutate: mutateItem } = useUpdateItem();
 
     const { data } = useGetCategories();
     const categories =
@@ -52,42 +54,90 @@ const CreateFeedDialog = ({ isOpen, setIsOpen }: CreateFeedDialogProps) => {
 
     const formik = useFormik({
         initialValues: defaultValues,
-        validationSchema: getCreateFeedDialogSchema(),
+        validationSchema: getUpdateFeedDialogSchema(),
 
         onSubmit: async (values, { setSubmitting }) => {
-            mutateImage(uploadedImage as File, {
-                onSuccess: ({ url, path }) => {
-                    mutateItem(
-                        {
-                            title: values.title,
-                            description: values.description,
-                            address: values.address,
-                            image: url,
-                            imageStoragePath: path,
-                            category: values.category,
-                            ownerUid: currentUser?.uid || '',
+            if (typeof uploadedImage === 'string') {
+                mutateItem(
+                    {
+                        uid: updateData.uid,
+                        title: values.title,
+                        description: values.description,
+                        address: values.address,
+                        image: updateData.image,
+                        imageStoragePath: updateData.imageStoragePath,
+                        category: values.category,
+                        ownerUid: updateData.uid,
+                    },
+                    {
+                        onSuccess: () => {
+                            setSubmitting(false);
+                            handleClose();
+                            setOpenSuccessAlert(true);
                         },
-                        {
-                            onSuccess: () => {
-                                setSubmitting(false);
-                                handleClose();
-                                setOpenSuccessAlert(true);
-                            },
-                            onError: () => {
-                                setSubmitting(false);
-                            },
-                        }
-                    );
-                },
-                onError: () => {
-                    setSubmitting(false);
-                },
-            });
+                        onError: () => {
+                            setSubmitting(false);
+                        },
+                    }
+                );
+            } else {
+                mutateImage(
+                    {
+                        image: uploadedImage as File,
+                        imagePath: updateData.imageStoragePath,
+                    },
+                    {
+                        onSuccess: ({ url, path }) => {
+                            mutateItem(
+                                {
+                                    uid: updateData.uid,
+                                    title: values.title,
+                                    description: values.description,
+                                    address: values.address,
+                                    image: url,
+                                    imageStoragePath: path,
+                                    category: values.category,
+                                    ownerUid: updateData.uid,
+                                },
+                                {
+                                    onSuccess: () => {
+                                        setSubmitting(false);
+                                        handleClose();
+                                        setOpenSuccessAlert(true);
+                                    },
+                                    onError: () => {
+                                        setSubmitting(false);
+                                    },
+                                }
+                            );
+                        },
+                        onError: () => {
+                            setSubmitting(false);
+                        },
+                    }
+                );
+            }
         },
     });
 
     const isSubmittingForm =
         isPendingImage || isPendingItem || formik.isSubmitting;
+
+    useEffect(() => {
+        if (isOpen) {
+            if (updateData.image) setUploadedImage(updateData.image);
+            if (updateData.title)
+                formik.setFieldValue('title', updateData.title);
+            if (updateData.description)
+                formik.setFieldValue('description', updateData.description);
+            if (updateData.image)
+                formik.setFieldValue('image', updateData.image);
+            if (updateData.address)
+                formik.setFieldValue('address', updateData.address);
+            if (updateData.category)
+                formik.setFieldValue('category', updateData.category);
+        }
+    }, [isOpen, updateData]);
 
     return (
         <>
@@ -159,7 +209,7 @@ const CreateFeedDialog = ({ isOpen, setIsOpen }: CreateFeedDialogProps) => {
                                 variant="contained"
                                 type="submit"
                             >
-                                Create
+                                Update
                             </Button>
                         </Grid2>
                     </Grid2>
@@ -176,11 +226,11 @@ const CreateFeedDialog = ({ isOpen, setIsOpen }: CreateFeedDialogProps) => {
                     severity="success"
                     variant="filled"
                 >
-                    A new feed created successfully!
+                    This feed updated successfully!
                 </Alert>
             </Snackbar>
         </>
     );
 };
 
-export default CreateFeedDialog;
+export default UpdateFeedDialog;

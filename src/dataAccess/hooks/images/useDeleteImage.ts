@@ -4,13 +4,13 @@ import {
     useMutation,
 } from '@tanstack/react-query';
 import { FirebaseError } from 'firebase/app';
-import { imageDelete } from '../../services';
+import { deleteImage } from '../../services';
 
-export const useImageDelete = (
+export const useDeleteImage = (
     mutationOptions?: Partial<UseMutationOptions<null, FirebaseError, string>>
 ): UseMutationResult<null, FirebaseError, string> => {
     return useMutation({
-        mutationFn: imageDelete,
+        mutationFn: deleteImage,
         ...mutationOptions,
     });
 };

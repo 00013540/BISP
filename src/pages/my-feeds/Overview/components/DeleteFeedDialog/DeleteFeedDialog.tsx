@@ -10,7 +10,7 @@ import {
 
 import { TimerThinSVG } from '@/components/icons';
 import { CommonDialog } from '@/components/dialogs';
-import { useImageDelete, useDeleteItem } from '@/dataAccess/hooks';
+import { useDeleteImage, useDeleteItem } from '@/dataAccess/hooks';
 
 import { DeleteFeedDialogProps } from './DeleteFeedDialog.types.ts';
 import { useState } from 'react';
@@ -22,7 +22,7 @@ const DeleteFeedDialog = ({
 }: DeleteFeedDialogProps) => {
     const theme = useTheme();
     const { isPending: isImageDeletePending, mutate: mutateImageDelete } =
-        useImageDelete();
+        useDeleteImage();
     const { isPending: isItemDeletePending, mutate: mutateItemDelete } =
         useDeleteItem();
 

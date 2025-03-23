@@ -4,10 +4,10 @@ import {
     useMutation,
 } from '@tanstack/react-query';
 import { FirebaseError } from 'firebase/app';
-import { imageUpdate } from '../../services';
+import { updateImage } from '../../services';
 import { ImageUploadResponse } from '../../types';
 
-export const useImageUpdate = (
+export const useUpdateImage = (
     mutationOptions?: Partial<
         UseMutationOptions<
             ImageUploadResponse,
@@ -27,7 +27,7 @@ export const useImageUpdate = (
     }
 > => {
     return useMutation({
-        mutationFn: imageUpdate,
+        mutationFn: updateImage,
         ...mutationOptions,
     });
 };

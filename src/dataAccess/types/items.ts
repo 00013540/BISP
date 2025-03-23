@@ -73,3 +73,7 @@ export interface CreateItemData {
     category: string;
     ownerUid: string;
 }
+
+export interface UpdateItemData extends CreateItemData {
+    uid: string;
+}

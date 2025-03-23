@@ -7,7 +7,7 @@ import {
 } from 'firebase/storage';
 import { v4 as uuidv4 } from 'uuid';
 
-export const imageUpload = async (
+export const createImage = async (
     image: File
 ): Promise<{ url: string; path: string }> => {
     const storage = getStorage();

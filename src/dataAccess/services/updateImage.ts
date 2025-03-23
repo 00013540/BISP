@@ -18,7 +18,7 @@ const handleDelete = async (imagePath: string) => {
     }
 };
 
-export const imageUpdate = async ({
+export const updateImage = async ({
     image,
     imagePath,
 }: {
