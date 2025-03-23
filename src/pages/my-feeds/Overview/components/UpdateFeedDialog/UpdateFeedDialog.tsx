@@ -67,7 +67,7 @@ const UpdateFeedDialog = ({
                         image: updateData.image,
                         imageStoragePath: updateData.imageStoragePath,
                         category: values.category,
-                        ownerUid: updateData.uid,
+                        ownerUid: updateData.ownerUid,
                     },
                     {
                         onSuccess: () => {

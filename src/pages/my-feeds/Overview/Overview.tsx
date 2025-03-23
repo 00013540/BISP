@@ -12,6 +12,7 @@ import {
     DeleteFeedDialog,
 } from './components';
 import { WrapperStyled, ContentWrapperStyled } from './Overview.styled.ts';
+import { useUser } from '@/context/user-context';
 
 const Overview = () => {
     const [isOpenActivateDialog, setIsOpenActivateDialog] = useState(false);
@@ -36,7 +37,10 @@ const Overview = () => {
         ownerUid: '',
     });
 
-    const { data } = useGetItems();
+    const { currentUser } = useUser();
+    const { data } = useGetItems({
+        ownerUid: currentUser?.uid || null,
+    });
 
     const handleDelete = (uid: string, imageStoragePath: string) => {
         setDeleteData({

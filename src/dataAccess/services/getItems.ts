@@ -1,10 +1,19 @@
-import { collection, getDocs } from 'firebase/firestore';
+import { collection, query, where, getDocs } from 'firebase/firestore';
 import { db } from '@/firebase';
 
 import { Item, ItemData } from '../types';
 
-export const getItems = async (): Promise<ItemData[]> => {
-    const itemsSnapshot = await getDocs(collection(db, 'Items'));
+export const getItems = async (
+    filters?: Record<string, string | null>
+): Promise<ItemData[]> => {
+    const itemsRef = collection(db, 'Items');
+    const queries = Object.entries(filters || {})
+        .map(([key, val]) => {
+            return val ? [where(key, '==', val)] : [];
+        })
+        .flat();
+    const q = query(itemsRef, ...queries);
+    const itemsSnapshot = await getDocs(q);
 
     const allItems = itemsSnapshot.docs.map((itemSnap): ItemData => {
         const itemData = itemSnap.data() as Item;
