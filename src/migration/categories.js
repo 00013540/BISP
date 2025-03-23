@@ -29,7 +29,7 @@ export async function clearAndAddCategories() {
 
     categories.forEach((category) => {
         const docRef = categoriesRef.doc(); // Auto-generate ID
-        batchAdd.set(docRef, { id: docRef.id, name: category });
+        batchAdd.set(docRef, { name: category });
     });
 
     try {
