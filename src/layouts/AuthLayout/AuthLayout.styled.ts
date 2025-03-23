@@ -1,9 +1,10 @@
 import { alpha, Box, styled } from '@mui/material';
 
-export const WrapperStyled = styled(Box)(() => ({
+export const WrapperStyled = styled(Box)(({ theme }) => ({
     width: '100%',
     minHeight: '100vh',
     display: 'flex',
+    backgroundColor: theme.palette.white,
 }));
 
 export const LeftWrapperStyled = styled(Box)(() => ({

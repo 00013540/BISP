@@ -5,6 +5,7 @@ const CssBaseline = () => {
                 'html, body': {
                     height: '100%',
                     margin: 0,
+                    backgroundColor: '#f5f5f5',
                 },
                 '#root': {
                     minHeight: '100%',

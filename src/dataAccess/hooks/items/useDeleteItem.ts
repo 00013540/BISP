@@ -7,18 +7,15 @@ import {
 import { FirebaseError } from 'firebase/app';
 
 import { getItemsKey } from '../getQueryKeys.ts';
-import { CreateItemData } from '../../types';
-import { createItem } from '../../services';
+import { deleteItem } from '../../services';
 
-export const useCreateItem = (
-    mutationOptions?: Partial<
-        UseMutationOptions<CreateItemData, FirebaseError, CreateItemData>
-    >
-): UseMutationResult<CreateItemData, FirebaseError, CreateItemData> => {
+export const useDeleteItem = (
+    mutationOptions?: Partial<UseMutationOptions<null, FirebaseError, string>>
+): UseMutationResult<null, FirebaseError, string> => {
     const queryClient = useQueryClient();
 
     return useMutation({
-        mutationFn: createItem,
+        mutationFn: deleteItem,
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: getItemsKey() });
         },

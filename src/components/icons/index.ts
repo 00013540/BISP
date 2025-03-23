@@ -12,3 +12,4 @@ export { default as MailSVG } from './MailSVG.tsx';
 export { default as MarketplaceSVG } from './MarketplaceSVG.tsx';
 export { default as PortfolioSVG } from './PortfolioSVG.tsx';
 export { default as ReturnBackSVG } from './ReturnBackSVG.tsx';
+export { default as TimerThinSVG } from './TimerThinSVG.tsx';

@@ -6,3 +6,4 @@ export * from './Loader';
 export * from './HelperText';
 export * from './CustomSelect';
 export * from './CustomImageUploader';
+export * from './CustomCard';
