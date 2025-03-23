@@ -20,6 +20,12 @@ export enum ItemType {
     AUCTION = 'AUCTION',
 }
 
+export enum ItemDuration {
+    ONE = 1,
+    THREE = 3,
+    FIVE = 5,
+}
+
 export enum ItemStatus {
     NEW = 'NEW',
     ACTIVE = 'ACTIVE',
@@ -76,4 +82,10 @@ export interface CreateItemData {
 
 export interface UpdateItemData extends CreateItemData {
     uid: string;
+}
+
+export interface ActivateItemData {
+    uid: string;
+    duration: number;
+    type: ItemType;
 }

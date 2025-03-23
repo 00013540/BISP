@@ -6,6 +6,7 @@ import { useGetItems } from '@/dataAccess/hooks';
 import { CustomCard } from '@/components/common';
 
 import {
+    ActivateFeedDialog,
     CreateFeedDialog,
     UpdateFeedDialog,
     DeleteFeedDialog,
@@ -13,9 +14,13 @@ import {
 import { WrapperStyled, ContentWrapperStyled } from './Overview.styled.ts';
 
 const Overview = () => {
+    const [isOpenActivateDialog, setIsOpenActivateDialog] = useState(false);
     const [isOpenCreateDialog, setIsOpenCreateDialog] = useState(false);
     const [isOpenUpdateDialog, setIsOpenUpdateDialog] = useState(false);
     const [isOpenDeleteDialog, setIsOpenDeleteDialog] = useState(false);
+    const [activateData, setActivateData] = useState({
+        uid: '',
+    });
     const [deleteData, setDeleteData] = useState({
         uid: '',
         imageStoragePath: '',
@@ -46,7 +51,10 @@ const Overview = () => {
         setIsOpenUpdateDialog(true);
     };
 
-    const handleActivate = () => {};
+    const handleActivate = (activateData: { uid: string }) => {
+        setActivateData(activateData);
+        setIsOpenActivateDialog(true);
+    };
 
     return (
         <WrapperStyled>
@@ -88,6 +96,11 @@ const Overview = () => {
                     )
                 )}
             </Grid2>
+            <ActivateFeedDialog
+                isOpen={isOpenActivateDialog}
+                setIsOpen={setIsOpenActivateDialog}
+                activateData={activateData}
+            />
             <CreateFeedDialog
                 isOpen={isOpenCreateDialog}
                 setIsOpen={setIsOpenCreateDialog}

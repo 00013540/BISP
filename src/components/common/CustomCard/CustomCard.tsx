@@ -48,7 +48,7 @@ const CustomCard = ({
 
     const handleActivate = () => {
         if (onActivate) {
-            onActivate(uid);
+            onActivate({ uid });
         }
     };
 

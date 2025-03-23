@@ -96,6 +96,7 @@ const CreateFeedDialog = ({ isOpen, setIsOpen }: CreateFeedDialogProps) => {
                 open={isOpen}
                 onClose={handleClose}
                 isSubmitting={isSubmittingForm}
+                maxWidth={500}
                 title="Create a New Feed"
             >
                 <form onSubmit={formik.handleSubmit}>

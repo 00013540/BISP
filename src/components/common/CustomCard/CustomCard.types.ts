@@ -12,5 +12,5 @@ export interface CustomCardProps {
     ownerUid: string;
     onDelete?: (uid: string, imageStoragePath: string) => void;
     onUpdate?: (data: UpdateItemData) => void;
-    onActivate?: (uid: string) => void;
+    onActivate?: (data: { uid: string }) => void;
 }

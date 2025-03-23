@@ -1,4 +1,5 @@
 export * from './createCategory.ts';
+export * from './activateItem.ts';
 export * from './createItem.ts';
 export * from './createUser.ts';
 export * from './getUser.ts';
