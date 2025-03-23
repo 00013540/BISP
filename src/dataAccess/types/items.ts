@@ -57,7 +57,7 @@ export interface ItemData {
     category: string;
     ownerUid: string;
     status: ItemStatus;
-    participants: ParticipantData[];
+    participants: ParticipantData[] | IParticipant[];
     address: string;
     releasedAt: FieldValue;
     duration: number;
