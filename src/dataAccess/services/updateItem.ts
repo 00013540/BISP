@@ -1,20 +1,19 @@
-import { doc, updateDoc, serverTimestamp } from 'firebase/firestore';
+import { doc, updateDoc } from 'firebase/firestore';
 
 import { db } from '@/firebase';
 
-import { ItemStatus, ItemType, UpdateItemData } from '../types';
-import { ItemConstructor } from '../constructors';
+import { UpdateItemData } from '../types';
 
 export const updateItem = async (itemData: UpdateItemData) => {
     const itemsRef = doc(db, 'Items', itemData.uid);
-    const newItem = new ItemConstructor({
-        ...itemData,
-        status: ItemStatus.NEW,
-        participants: [],
-        duration: 0,
-        type: ItemType.FIRST_BID,
-        releasedAt: serverTimestamp(),
-    });
-    await updateDoc(itemsRef, { ...newItem });
+    const updatedItem = {
+        title: itemData.title,
+        description: itemData.description,
+        address: itemData.address,
+        image: itemData.image,
+        imageStoragePath: itemData.imageStoragePath,
+        category: itemData.category,
+    };
+    await updateDoc(itemsRef, { ...updatedItem });
     return itemData;
 };
