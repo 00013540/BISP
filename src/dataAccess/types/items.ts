@@ -30,7 +30,6 @@ export enum ItemStatus {
     NEW = 'NEW',
     ACTIVE = 'ACTIVE',
     CLAIMED = 'CLAIMED',
-    CLOSED = 'CLOSED',
     DELETED = 'DELETED',
 }
 
@@ -88,4 +87,8 @@ export interface ActivateItemData {
     uid: string;
     duration: number;
     type: ItemType;
+}
+
+export interface GetItemParams {
+    uid: string;
 }
