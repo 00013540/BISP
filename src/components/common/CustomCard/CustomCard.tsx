@@ -23,6 +23,7 @@ const CustomCard = ({
     imageStoragePath,
     category,
     ownerUid,
+    ownerPhone,
     hasActions,
     onDelete,
     onUpdate,
@@ -53,6 +54,7 @@ const CustomCard = ({
                 imageStoragePath,
                 category,
                 ownerUid,
+                ownerPhone,
             });
         }
     };

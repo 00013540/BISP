@@ -15,7 +15,7 @@ export const useGetUser = (
     queryOptions?: Partial<UseQueryOptions<UserData | null, FirebaseError>>
 ): UseQueryResult<UserData | null, FirebaseError> => {
     return useQuery({
-        queryKey: getUserKey(),
+        queryKey: getUserKey(uid),
         queryFn: () => getUser(uid),
         placeholderData: keepPreviousData,
         ...queryOptions,

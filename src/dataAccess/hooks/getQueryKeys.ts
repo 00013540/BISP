@@ -2,7 +2,7 @@ import type { QueryKey } from '@tanstack/react-query';
 
 import { GetItemParams } from '../types';
 
-export const getUserKey = (): QueryKey => ['user'];
+export const getUserKey = (uid: string): QueryKey => ['user', uid];
 
 export const getItemsKey = (
     filters?: Record<string, string | null>

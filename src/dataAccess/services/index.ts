@@ -13,3 +13,5 @@ export * from './updateImage.ts';
 export * from './deleteImage.ts';
 export * from './addBid.ts';
 export * from './removeBid.ts';
+export * from './addToFavorite.ts';
+export * from './removeFromFavorite.ts';

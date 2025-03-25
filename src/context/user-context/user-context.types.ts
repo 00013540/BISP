@@ -6,6 +6,7 @@ export interface UserContextInterface {
     userLoggedIn: boolean;
     loading: boolean;
     clearUser: () => void;
+    refetch: () => void;
 }
 
 export interface UserContextProviderProps {

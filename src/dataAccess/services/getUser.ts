@@ -11,7 +11,12 @@ export const getUser = async (uid: string): Promise<UserData> => {
 
     const favoriteFeedsRequests = userData.favoriteFeeds.map(
         async (favoriteFeedRef) => {
-            const favoriteFeedSnap = await getDoc(favoriteFeedRef);
+            const itemRef = doc(
+                db,
+                'Items',
+                favoriteFeedRef as unknown as string
+            );
+            const favoriteFeedSnap = await getDoc(itemRef);
             const favoriteFeedData = favoriteFeedSnap.data() as Item;
 
             return {
@@ -27,7 +32,8 @@ export const getUser = async (uid: string): Promise<UserData> => {
     );
 
     const myFeedsRequests = userData.myFeeds.map(async (myFeedRef) => {
-        const myFeedSnap = await getDoc(myFeedRef);
+        const itemRef = doc(db, 'Items', myFeedRef as unknown as string);
+        const myFeedSnap = await getDoc(itemRef);
         const myFeedData = myFeedSnap.data() as Item;
 
         return {
@@ -42,7 +48,8 @@ export const getUser = async (uid: string): Promise<UserData> => {
     });
 
     const myBidsRequests = userData.myBids.map(async (myBidRef) => {
-        const myBidSnap = await getDoc(myBidRef);
+        const itemRef = doc(db, 'Items', myBidRef as unknown as string);
+        const myBidSnap = await getDoc(itemRef);
         const myBidData = myBidSnap.data() as Item;
 
         return {

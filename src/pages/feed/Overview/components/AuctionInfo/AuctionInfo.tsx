@@ -5,7 +5,12 @@ import { Alert, Box, Button, Grid2, Snackbar, Typography } from '@mui/material';
 
 import { useIsMobile, useTimeLeft } from '@/hooks';
 import { CustomLink } from '@/components/common';
-import { useGetItem, useRemoveBid } from '@/dataAccess/hooks';
+import {
+    useAddToFavorite,
+    useGetItem,
+    useRemoveBid,
+    useRemoveFromFavorite,
+} from '@/dataAccess/hooks';
 import { useUser } from '@/context/user-context';
 import { ItemData, ItemStatus, ParticipantData } from '@/dataAccess/types';
 import { HeartFilledSVG, HeartSVG } from '@/components/icons';
@@ -21,12 +26,23 @@ import { AuctionInfoProps } from './AuctionInfo.types.ts';
 const AuctionInfo = ({ isAuctionExpired }: AuctionInfoProps) => {
     const isMobile = useIsMobile();
     const { feedAddress } = useParams();
-    const { currentUser } = useUser();
-    const { isPending: isRemoveBidPending, mutate } = useRemoveBid();
+    const { currentUser, refetch } = useUser();
+    const { isPending: isAddToFavoritePending, mutate: mutateAddToFavorite } =
+        useAddToFavorite();
+    const {
+        isPending: isRemoveFromFavoritePending,
+        mutate: mutateRemoveFromFavorite,
+    } = useRemoveFromFavorite();
+    const { isPending: isRemoveBidPending, mutate: mutateRemoveBid } =
+        useRemoveBid();
     const { data: rawData } = useGetItem({
         uid: feedAddress || '',
     });
     const data = rawData || ({} as ItemData);
+
+    const isAlreadyInFavorite = !!currentUser?.favoriteFeeds.find(
+        (feed) => feed.uid === feedAddress
+    );
 
     const isEndedAuction =
         isAuctionExpired || data.status === ItemStatus.CLAIMED;
@@ -72,7 +88,7 @@ const AuctionInfo = ({ isAuctionExpired }: AuctionInfoProps) => {
     const handleRemoveBid = () => {
         if (!currentUser?.uid || !feedAddress) return;
 
-        mutate(
+        mutateRemoveBid(
             {
                 refToUserUid: currentUser.uid,
                 itemUid: feedAddress,
@@ -83,6 +99,38 @@ const AuctionInfo = ({ isAuctionExpired }: AuctionInfoProps) => {
                 },
             }
         );
+    };
+
+    const handleAddToFavorite = () => {
+        if (currentUser?.uid && feedAddress) {
+            mutateAddToFavorite(
+                {
+                    refToUserUid: currentUser?.uid,
+                    refToItem: feedAddress,
+                },
+                {
+                    onSuccess: () => {
+                        refetch();
+                    },
+                }
+            );
+        }
+    };
+
+    const handleRemoveFromFavorite = () => {
+        if (currentUser?.uid && feedAddress) {
+            mutateRemoveFromFavorite(
+                {
+                    refToUserUid: currentUser?.uid,
+                    refToItem: feedAddress,
+                },
+                {
+                    onSuccess: () => {
+                        refetch();
+                    },
+                }
+            );
+        }
     };
 
     return (
@@ -192,15 +240,26 @@ const AuctionInfo = ({ isAuctionExpired }: AuctionInfoProps) => {
                 mb={4}
                 flexDirection={isMobile ? 'column' : 'row'}
             >
-                <Button startIcon={<HeartSVG height="1rem" width="1rem" />}>
-                    Add to favorite
-                </Button>
-                <Button
-                    variant="outlined"
-                    startIcon={<HeartFilledSVG height="1rem" width="1rem" />}
-                >
-                    Remove from favorite
-                </Button>
+                {!isAlreadyInFavorite ? (
+                    <Button
+                        loading={isAddToFavoritePending}
+                        startIcon={<HeartSVG height="1rem" width="1rem" />}
+                        onClick={handleAddToFavorite}
+                    >
+                        Add to favorite
+                    </Button>
+                ) : (
+                    <Button
+                        variant="outlined"
+                        loading={isRemoveFromFavoritePending}
+                        startIcon={
+                            <HeartFilledSVG height="1rem" width="1rem" />
+                        }
+                        onClick={handleRemoveFromFavorite}
+                    >
+                        Remove from favorite
+                    </Button>
+                )}
                 {hasUserPlacedBid && (
                     <Button
                         disabled={isEndedAuction}

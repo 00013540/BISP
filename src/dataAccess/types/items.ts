@@ -104,3 +104,13 @@ export interface RemoveBidData {
     itemUid: string;
     refToUserUid: string;
 }
+
+export interface AddToFavoriteData {
+    refToUserUid: string;
+    refToItem: string;
+}
+
+export interface RemoveFromFavoriteData {
+    refToUserUid: string;
+    refToItem: string;
+}
