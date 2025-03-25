@@ -4,6 +4,10 @@ export const routes = {
         path: '/',
         title: 'Feeds',
     },
+    FEED: {
+        id: 'feed',
+        path: '/feed/:feedAddress',
+    },
     MY_FEEDS: {
         id: 'my_feeds',
         path: '/my-feeds',

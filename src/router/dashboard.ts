@@ -6,11 +6,12 @@ import { BaseRoute } from './router.types.ts';
 import { routes } from './router.constants.ts';
 
 const HomeOverview = lazy(() => import('@/pages/home/Overview/Overview.tsx'));
+const MyFeedOverview = lazy(() => import('@/pages/feed/Overview/Overview.tsx'));
 const MyFeedsOverview = lazy(
     () => import('@/pages/my-feeds/Overview/Overview.tsx')
 );
 
-const { HOME, MY_FEEDS, LOGOUT } = routes;
+const { HOME, MY_FEEDS, LOGOUT, FEED } = routes;
 
 const homeRoute: BaseRoute = {
     id: HOME.id,
@@ -18,6 +19,13 @@ const homeRoute: BaseRoute = {
     title: HOME.title,
     icon: MarketplaceSVG,
     component: HomeOverview,
+};
+
+const feedRoute: BaseRoute = {
+    id: FEED.id,
+    path: FEED.path,
+    component: MyFeedOverview,
+    hideInSidebar: true,
 };
 
 const myFeedsRoute: BaseRoute = {
@@ -35,4 +43,9 @@ const logOutRoute: BaseRoute = {
     icon: LogoutSVG,
 };
 
-export const dashboardRoutes = [homeRoute, myFeedsRoute, logOutRoute];
+export const dashboardRoutes = [
+    homeRoute,
+    feedRoute,
+    myFeedsRoute,
+    logOutRoute,
+];
