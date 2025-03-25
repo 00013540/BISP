@@ -92,3 +92,7 @@ export interface ActivateItemData {
 export interface GetItemParams {
     uid: string;
 }
+
+export interface AddBidData extends IParticipant {
+    itemUid: string;
+}

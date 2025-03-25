@@ -1,6 +1,8 @@
+import { useState } from 'react';
 import { Box, Button, Grid2, Typography } from '@mui/material';
 
 import { useIsMobile } from '@/hooks';
+import { CustomLink } from '@/components/common';
 import { HeartFilledSVG, HeartSVG } from '@/components/icons';
 
 import {
@@ -8,10 +10,12 @@ import {
     ParticipantImageStyled,
     ParticipantWrapperStyled,
 } from './AuctionInfo.styled.ts';
-import { CustomLink } from '@/components/common';
+import { PlaceBidDialog } from '../PlaceBidDialog';
 
 const AuctionInfo = () => {
     const isMobile = useIsMobile();
+
+    const [isBidDialogOpen, setIsBidDialogOpen] = useState(false);
 
     return (
         <>
@@ -118,7 +122,9 @@ const AuctionInfo = () => {
                 >
                     Remove from favorite
                 </Button>
-                <Button>Place a bid</Button>
+                <Button onClick={() => setIsBidDialogOpen(true)}>
+                    Place a bid
+                </Button>
             </Box>
 
             <Box>
@@ -141,6 +147,10 @@ const AuctionInfo = () => {
                 </Box>
                 <Button>Claim bid transaction</Button>
             </Box>
+            <PlaceBidDialog
+                isOpen={isBidDialogOpen}
+                setIsOpen={setIsBidDialogOpen}
+            />
         </>
     );
 };
