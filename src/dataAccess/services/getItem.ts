@@ -36,6 +36,7 @@ export const getItem = async (uid: string): Promise<ItemData> => {
         imageStoragePath: itemData.imageStoragePath,
         category: itemData.category,
         ownerUid: itemData.ownerUid,
+        ownerPhone: itemData.ownerPhone,
         status: itemData.status,
         participants: parsedParticipants,
         address: itemData.address,

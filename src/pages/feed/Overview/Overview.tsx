@@ -18,8 +18,8 @@ const Overview = () => {
 
     const data = rawData || ({} as ItemData);
     const releasedAt = new Timestamp(
-        data.releasedAt.seconds,
-        data.releasedAt.nanoseconds
+        (data.releasedAt as Timestamp)?.seconds,
+        (data.releasedAt as Timestamp)?.nanoseconds
     );
 
     const isAuctionExpired = hasDurationPassed(releasedAt, data.duration);

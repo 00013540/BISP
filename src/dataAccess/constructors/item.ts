@@ -8,6 +8,7 @@ export class ItemConstructor {
     imageStoragePath: string;
     category: string;
     ownerUid: string;
+    ownerPhone: string;
     status: ItemStatus;
     participants: IParticipant[];
     address: string;
@@ -22,6 +23,7 @@ export class ItemConstructor {
         this.imageStoragePath = userData.imageStoragePath;
         this.category = userData.category;
         this.ownerUid = userData.ownerUid;
+        this.ownerPhone = userData.ownerPhone;
         this.status = userData.status;
         this.participants = userData.participants;
         this.address = userData.address;

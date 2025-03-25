@@ -66,6 +66,7 @@ const CreateFeedDialog = ({ isOpen, setIsOpen }: CreateFeedDialogProps) => {
                             imageStoragePath: path,
                             category: values.category,
                             ownerUid: currentUser?.uid || '',
+                            ownerPhone: currentUser?.phoneNumber || '',
                         },
                         {
                             onSuccess: () => {

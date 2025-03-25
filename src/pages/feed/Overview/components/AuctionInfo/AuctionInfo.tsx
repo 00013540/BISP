@@ -32,8 +32,8 @@ const AuctionInfo = ({ isAuctionExpired }: AuctionInfoProps) => {
         isAuctionExpired || data.status === ItemStatus.CLAIMED;
 
     const releasedAt = new Timestamp(
-        data.releasedAt.seconds,
-        data.releasedAt.nanoseconds
+        (data.releasedAt as Timestamp)?.seconds,
+        (data.releasedAt as Timestamp)?.nanoseconds
     );
     const timeLeft = useTimeLeft({
         releasedAt: releasedAt,
@@ -235,8 +235,8 @@ const AuctionInfo = ({ isAuctionExpired }: AuctionInfoProps) => {
                         <Typography variant="h5" color="text.primary">
                             Contact info of current owner:
                         </Typography>
-                        <CustomLink type="tel" to="tel:998951502301">
-                            +998951502301
+                        <CustomLink type="tel" to={`tel:${data.ownerPhone}`}>
+                            {data.ownerPhone}
                         </CustomLink>
                     </Box>
                     <Button>Claim bid transaction</Button>

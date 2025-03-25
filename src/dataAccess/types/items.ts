@@ -1,4 +1,4 @@
-import { FieldValue } from 'firebase/firestore';
+import { FieldValue, Timestamp } from 'firebase/firestore';
 
 interface UserData {
     uid: string;
@@ -45,10 +45,11 @@ export interface Item {
     imageStoragePath: string;
     category: string;
     ownerUid: string;
+    ownerPhone: string;
     status: ItemStatus;
     participants: IParticipant[];
     address: string;
-    releasedAt: FieldValue;
+    releasedAt: FieldValue | Timestamp;
     duration: number;
     type: ItemType;
 }
@@ -61,13 +62,11 @@ export interface ItemData {
     imageStoragePath: string;
     category: string;
     ownerUid: string;
+    ownerPhone: string;
     status: ItemStatus;
     participants: ParticipantData[] | IParticipant[];
     address: string;
-    releasedAt: {
-        seconds: number;
-        nanoseconds: number;
-    };
+    releasedAt: FieldValue | Timestamp;
     duration: number;
     type: ItemType;
 }
@@ -80,6 +79,7 @@ export interface CreateItemData {
     imageStoragePath: string;
     category: string;
     ownerUid: string;
+    ownerPhone: string;
 }
 
 export interface UpdateItemData extends CreateItemData {
