@@ -1,6 +1,9 @@
 import * as yup from 'yup';
 
-export const getPlaceBidDialogSchema = (currentBid: number) => {
+export const getPlaceBidDialogSchema = (
+    currentBid: number,
+    totalBids: number
+) => {
     return yup.object().shape({
         bid: yup
             .number()
@@ -18,6 +21,13 @@ export const getPlaceBidDialogSchema = (currentBid: number) => {
                 `Placed bid is less than or equal current bid ${currentBid}`,
                 (value: number) => {
                     return Number(value) > currentBid;
+                }
+            )
+            .test(
+                'is-input-more-than-maximum',
+                `Placed bid is more than user total bid ${totalBids}`,
+                (value: number) => {
+                    return Number(value) <= totalBids;
                 }
             ),
     });

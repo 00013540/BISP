@@ -43,7 +43,10 @@ const PlaceBidDialog = ({ isOpen, setIsOpen }: PlaceBidDialogProps) => {
 
     const formik = useFormik({
         initialValues: defaultValues,
-        validationSchema: getPlaceBidDialogSchema(currentBid),
+        validationSchema: getPlaceBidDialogSchema(
+            currentBid,
+            currentUser?.totalBids || 0
+        ),
 
         onSubmit: async (values, { setFieldError }) => {
             const { data: newestRawData } = await refetch();
