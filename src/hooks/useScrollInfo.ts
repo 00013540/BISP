@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { useLocation } from 'react-router';
-import { debounce } from '@/utils/debounce';
+import { debounce } from '@/utils';
 
 export const useScrollInfo = (): {
     scrollbarWidth: number;

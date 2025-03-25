@@ -1,8 +1,11 @@
 import { useState } from 'react';
 import { useFormik } from 'formik';
+import { useParams } from 'react-router';
 import { Alert, Button, Grid2, Snackbar } from '@mui/material';
 
 import { getFormikError } from '@/utils';
+import { useUser } from '@/context/user-context';
+import { ItemData } from '@/dataAccess/types';
 import { useAddBid, useGetItem } from '@/dataAccess/hooks';
 import { CommonDialog } from '@/components/dialogs';
 import { CustomTextField } from '@/components/common';
@@ -12,9 +15,6 @@ import {
     defaultValues,
     getPlaceBidDialogSchema,
 } from './PlaceBidDialog.schema.ts';
-import { useUser } from '@/context/user-context';
-import { useParams } from 'react-router';
-import { ItemData } from '@/dataAccess/types';
 
 const PlaceBidDialog = ({ isOpen, setIsOpen }: PlaceBidDialogProps) => {
     const [openSuccessAlert, setOpenSuccessAlert] = useState(false);

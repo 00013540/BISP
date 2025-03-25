@@ -12,3 +12,4 @@ export * from './createImage.ts';
 export * from './updateImage.ts';
 export * from './deleteImage.ts';
 export * from './addBid.ts';
+export * from './removeBid.ts';

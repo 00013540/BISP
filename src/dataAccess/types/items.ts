@@ -10,7 +10,7 @@ interface UserData {
     imageStoragePath: string;
 }
 
-interface ParticipantData {
+export interface ParticipantData {
     user: UserData;
     placedBid: number;
 }
@@ -64,7 +64,10 @@ export interface ItemData {
     status: ItemStatus;
     participants: ParticipantData[] | IParticipant[];
     address: string;
-    releasedAt: FieldValue;
+    releasedAt: {
+        seconds: number;
+        nanoseconds: number;
+    };
     duration: number;
     type: ItemType;
 }
@@ -95,4 +98,9 @@ export interface GetItemParams {
 
 export interface AddBidData extends IParticipant {
     itemUid: string;
+}
+
+export interface RemoveBidData {
+    itemUid: string;
+    refToUserUid: string;
 }
