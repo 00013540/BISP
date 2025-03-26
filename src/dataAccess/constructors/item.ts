@@ -15,6 +15,7 @@ export class ItemConstructor {
     releasedAt: FieldValue;
     duration: number;
     type: ItemType;
+    isClaimAllowed: boolean;
 
     constructor(userData: IItem) {
         this.title = userData.title;
@@ -30,5 +31,6 @@ export class ItemConstructor {
         this.releasedAt = userData.releasedAt;
         this.duration = userData.duration;
         this.type = userData.type;
+        this.isClaimAllowed = userData.isClaimAllowed;
     }
 }

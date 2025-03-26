@@ -52,6 +52,7 @@ export interface Item {
     releasedAt: FieldValue | Timestamp;
     duration: number;
     type: ItemType;
+    isClaimAllowed: boolean;
 }
 
 export interface ItemData {
@@ -69,6 +70,7 @@ export interface ItemData {
     releasedAt: FieldValue | Timestamp;
     duration: number;
     type: ItemType;
+    isClaimAllowed: boolean;
 }
 
 export interface CreateItemData {

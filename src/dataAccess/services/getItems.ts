@@ -26,12 +26,14 @@ export const getItems = async (
             imageStoragePath: itemData.imageStoragePath,
             category: itemData.category,
             ownerUid: itemData.ownerUid,
+            ownerPhone: itemData.ownerPhone,
             status: itemData.status,
             participants: itemData.participants,
             address: itemData.address,
             releasedAt: itemData.releasedAt,
             duration: itemData.duration,
             type: itemData.type,
+            isClaimAllowed: itemData.isClaimAllowed,
         };
     });
 

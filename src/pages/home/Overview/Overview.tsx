@@ -24,10 +24,13 @@ const Overview = () => {
                         image,
                         imageStoragePath,
                         status,
+                        type,
                         ownerUid,
+                        ownerPhone,
                     }) => (
                         <Grid2 size={{ xs: 12, sm: 6, md: 4, lg: 3 }}>
                             <CustomCard
+                                type={type}
                                 key={uid}
                                 uid={uid}
                                 title={title}
@@ -38,6 +41,7 @@ const Overview = () => {
                                 status={status}
                                 imageStoragePath={imageStoragePath}
                                 ownerUid={ownerUid}
+                                ownerPhone={ownerPhone}
                             />
                         </Grid2>
                     )

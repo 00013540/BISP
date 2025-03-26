@@ -1,4 +1,4 @@
-import { UpdateItemData } from '@/dataAccess/types';
+import { UpdateItemData, ItemType } from '@/dataAccess/types';
 
 export interface CustomCardProps {
     uid: string;
@@ -7,6 +7,7 @@ export interface CustomCardProps {
     address: string;
     image: string;
     status: string;
+    type: ItemType;
     imageStoragePath: string;
     category: string;
     ownerUid: string;

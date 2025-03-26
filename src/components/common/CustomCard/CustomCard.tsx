@@ -2,15 +2,15 @@ import { MouseEvent } from 'react';
 import { useNavigate } from 'react-router';
 import { Box, Button } from '@mui/material';
 
-import { ItemStatus } from '@/dataAccess/types';
+import { ItemStatus, ItemType } from '@/dataAccess/types';
 
 import { CustomCardProps } from './CustomCard.types.ts';
 import {
-    WrapperStyled,
     ChipStyled,
-    ImageStyled,
     ContentStyled,
+    ImageStyled,
     TypographyStyled,
+    WrapperStyled,
 } from './CustomCard.styled.ts';
 
 const CustomCard = ({
@@ -20,6 +20,7 @@ const CustomCard = ({
     address,
     image,
     status,
+    type,
     imageStoragePath,
     category,
     ownerUid,
@@ -69,7 +70,10 @@ const CustomCard = ({
 
     return (
         <WrapperStyled onClick={handleNavigate}>
-            <ChipStyled label={status} color="success" />
+            <ChipStyled
+                label={type === ItemType.FIRST_BID ? 'First bid' : 'Auction'}
+                color="success"
+            />
             <ImageStyled src={image} alt="Image" />
             <ContentStyled>
                 <TypographyStyled variant="h5" color="text.primary" mb={1}>

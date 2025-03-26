@@ -79,6 +79,7 @@ const Overview = () => {
                         image,
                         imageStoragePath,
                         status,
+                        type,
                         ownerUid,
                         ownerPhone,
                     }) => (
@@ -93,6 +94,7 @@ const Overview = () => {
                                 address={address}
                                 image={image}
                                 status={status}
+                                type={type}
                                 imageStoragePath={imageStoragePath}
                                 ownerUid={ownerUid}
                                 ownerPhone={ownerPhone}

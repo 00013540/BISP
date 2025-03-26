@@ -43,5 +43,6 @@ export const getItem = async (uid: string): Promise<ItemData> => {
         releasedAt: itemData.releasedAt,
         duration: itemData.duration,
         type: itemData.type,
+        isClaimAllowed: itemData.isClaimAllowed,
     };
 };

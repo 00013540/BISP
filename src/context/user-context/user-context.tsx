@@ -28,7 +28,7 @@ export const UserContextProvider = ({ children }: UserContextProviderProps) => {
     const [loading, setLoading] = useState(true);
     const [currentUser, setCurrentUser] = useState<null | UserData>(null);
 
-    const { refetch, isFetching } = useGetUser(userUid);
+    const { data, refetch, isFetching } = useGetUser(userUid);
 
     const clearUser = () => {
         setUserUid('');
@@ -54,14 +54,12 @@ export const UserContextProvider = ({ children }: UserContextProviderProps) => {
     }, []);
 
     useEffect(() => {
-        if (userUid) {
-            refetch().then((data) => {
-                if (data.data) {
-                    setCurrentUser(data.data);
-                }
-            });
-        }
+        if (userUid) refetch();
     }, [userUid, refetch]);
+
+    useEffect(() => {
+        if (data) setCurrentUser(data);
+    }, [data]);
 
     const contextValue = {
         currentUser: currentUser,
