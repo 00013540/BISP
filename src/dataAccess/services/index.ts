@@ -15,3 +15,5 @@ export * from './addBid.ts';
 export * from './removeBid.ts';
 export * from './addToFavorite.ts';
 export * from './removeFromFavorite.ts';
+export * from './controlTransaction.ts';
+export * from './makeBidTransaction.ts';

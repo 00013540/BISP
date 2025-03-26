@@ -15,6 +15,7 @@ export const createItem = async (itemData: CreateItemData) => {
         type: ItemType.FIRST_BID,
         releasedAt: serverTimestamp(),
         isClaimAllowed: false,
+        isTransactionAllowed: false,
     });
     await addDoc(itemsRef, { ...newItem });
     return itemData;

@@ -16,6 +16,7 @@ export class ItemConstructor {
     duration: number;
     type: ItemType;
     isClaimAllowed: boolean;
+    isTransactionAllowed: boolean;
 
     constructor(userData: IItem) {
         this.title = userData.title;
@@ -32,5 +33,6 @@ export class ItemConstructor {
         this.duration = userData.duration;
         this.type = userData.type;
         this.isClaimAllowed = userData.isClaimAllowed;
+        this.isTransactionAllowed = userData.isTransactionAllowed;
     }
 }

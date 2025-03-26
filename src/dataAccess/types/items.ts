@@ -53,6 +53,7 @@ export interface Item {
     duration: number;
     type: ItemType;
     isClaimAllowed: boolean;
+    isTransactionAllowed: boolean;
 }
 
 export interface ItemData {
@@ -71,6 +72,7 @@ export interface ItemData {
     duration: number;
     type: ItemType;
     isClaimAllowed: boolean;
+    isTransactionAllowed: boolean;
 }
 
 export interface CreateItemData {

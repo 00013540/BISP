@@ -46,3 +46,15 @@ export interface CreateUserData {
     lastName: string;
     phoneNumber: string;
 }
+
+export interface ControlTransactionData {
+    refToItem: string;
+    isTransactionAllowed: boolean;
+}
+
+export interface MakeBidTransactionData {
+    refToItem: string;
+    fromUser: string;
+    toUser: string;
+    amount: number;
+}

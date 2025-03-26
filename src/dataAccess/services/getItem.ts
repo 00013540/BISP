@@ -44,5 +44,6 @@ export const getItem = async (uid: string): Promise<ItemData> => {
         duration: itemData.duration,
         type: itemData.type,
         isClaimAllowed: itemData.isClaimAllowed,
+        isTransactionAllowed: itemData.isTransactionAllowed,
     };
 };

@@ -7,6 +7,7 @@ import { useIsMobile, useTimeLeft } from '@/hooks';
 import { CustomLink } from '@/components/common';
 import {
     useAddToFavorite,
+    useControlTransaction,
     useGetItem,
     useRemoveBid,
     useRemoveFromFavorite,
@@ -26,12 +27,18 @@ import {
     ParticipantWrapperStyled,
 } from './AuctionInfo.styled.ts';
 import { PlaceBidDialog } from '../PlaceBidDialog';
+import { MakeBidTransactionDialog } from '../MakeBidTransactionDialog';
 import { AuctionInfoProps } from './AuctionInfo.types.ts';
 
 const AuctionInfo = ({ isAuctionExpired }: AuctionInfoProps) => {
     const isMobile = useIsMobile();
     const { feedAddress } = useParams();
     const { currentUser, loading: isUserLoading } = useUser();
+
+    const {
+        isPending: isControlTransactionLoading,
+        mutate: mutateControlTransaction,
+    } = useControlTransaction();
     const { isPending: isAddToFavoritePending, mutate: mutateAddToFavorite } =
         useAddToFavorite();
     const {
@@ -40,7 +47,7 @@ const AuctionInfo = ({ isAuctionExpired }: AuctionInfoProps) => {
     } = useRemoveFromFavorite();
     const { isPending: isRemoveBidPending, mutate: mutateRemoveBid } =
         useRemoveBid();
-    const { data: rawData } = useGetItem({
+    const { isFetching: isDataFetching, data: rawData } = useGetItem({
         uid: feedAddress || '',
     });
     const data = rawData || ({} as ItemData);
@@ -112,6 +119,15 @@ const AuctionInfo = ({ isAuctionExpired }: AuctionInfoProps) => {
 
     const [isBidDialogOpen, setIsBidDialogOpen] = useState(false);
     const [isRemoveBidOpen, setIsRemoveBidOpen] = useState(false);
+    const [isMakeBidTransactionOpen, setIsMakeBidTransactionOpen] =
+        useState(false);
+
+    const handleControlTransaction = (isTransactionAllowed: boolean) => {
+        mutateControlTransaction({
+            refToItem: data?.uid,
+            isTransactionAllowed,
+        });
+    };
 
     const handleRemoveBid = () => {
         if (!currentUser?.uid || !feedAddress) return;
@@ -303,29 +319,33 @@ const AuctionInfo = ({ isAuctionExpired }: AuctionInfoProps) => {
                                         Remove from favorite
                                     </Button>
                                 )}
-                                {canUserPlaceBid && (
-                                    <>
-                                        {hasUserPlacedBid && (
+                                {canUserPlaceBid &&
+                                    !(
+                                        data.isTransactionAllowed &&
+                                        data.isClaimAllowed
+                                    ) && (
+                                        <>
+                                            {hasUserPlacedBid && (
+                                                <Button
+                                                    loading={isRemoveBidPending}
+                                                    color="error"
+                                                    variant="outlined"
+                                                    onClick={handleRemoveBid}
+                                                >
+                                                    Remove bid
+                                                </Button>
+                                            )}
                                             <Button
-                                                loading={isRemoveBidPending}
-                                                color="error"
-                                                variant="outlined"
-                                                onClick={handleRemoveBid}
+                                                onClick={() =>
+                                                    setIsBidDialogOpen(true)
+                                                }
                                             >
-                                                Remove bid
+                                                {hasUserPlacedBid
+                                                    ? 'Update placed bid'
+                                                    : 'Place a bid'}
                                             </Button>
-                                        )}
-                                        <Button
-                                            onClick={() =>
-                                                setIsBidDialogOpen(true)
-                                            }
-                                        >
-                                            {hasUserPlacedBid
-                                                ? 'Update placed bid'
-                                                : 'Place a bid'}
-                                        </Button>
-                                    </>
-                                )}
+                                        </>
+                                    )}
                             </Box>
                             {!canUserPlaceBid && (
                                 <Typography
@@ -354,13 +374,32 @@ const AuctionInfo = ({ isAuctionExpired }: AuctionInfoProps) => {
                         mb={4}
                         flexDirection={isMobile ? 'column' : 'row'}
                     >
-                        {canOwnerAllowTransaction && (
+                        {canOwnerAllowTransaction && !data.isClaimAllowed && (
                             <>
-                                {!data.isClaimAllowed ? (
-                                    <Button>Allow to claim transaction</Button>
+                                {!data.isTransactionAllowed ? (
+                                    <Button
+                                        loading={
+                                            isControlTransactionLoading ||
+                                            isDataFetching
+                                        }
+                                        onClick={() =>
+                                            handleControlTransaction(true)
+                                        }
+                                    >
+                                        Allow to make transaction
+                                    </Button>
                                 ) : (
-                                    <Button variant="outlined">
-                                        Remove allowance to claim transaction
+                                    <Button
+                                        variant="outlined"
+                                        loading={
+                                            isControlTransactionLoading ||
+                                            isDataFetching
+                                        }
+                                        onClick={() =>
+                                            handleControlTransaction(false)
+                                        }
+                                    >
+                                        Remove allowance to make transaction
                                     </Button>
                                 )}
                             </>
@@ -378,7 +417,7 @@ const AuctionInfo = ({ isAuctionExpired }: AuctionInfoProps) => {
                     <Typography variant="h3" color="text.highlight" mb={2}>
                         Congratulation you won in this auction
                     </Typography>
-                    {data.status !== ItemStatus.CLAIMED && (
+                    {data.status === ItemStatus.ACTIVE && (
                         <>
                             <Box
                                 display="flex"
@@ -397,9 +436,16 @@ const AuctionInfo = ({ isAuctionExpired }: AuctionInfoProps) => {
                                     {data.ownerPhone}
                                 </CustomLink>
                             </Box>
-                            {data.isClaimAllowed && (
-                                <Button>Make bid transaction</Button>
-                            )}
+                            {!data.isClaimAllowed &&
+                                data.isTransactionAllowed && (
+                                    <Button
+                                        onClick={() =>
+                                            setIsMakeBidTransactionOpen(true)
+                                        }
+                                    >
+                                        Make bid transaction
+                                    </Button>
+                                )}
                         </>
                     )}
                 </Box>
@@ -408,6 +454,10 @@ const AuctionInfo = ({ isAuctionExpired }: AuctionInfoProps) => {
             <PlaceBidDialog
                 isOpen={isBidDialogOpen}
                 setIsOpen={setIsBidDialogOpen}
+            />
+            <MakeBidTransactionDialog
+                isOpen={isMakeBidTransactionOpen}
+                setIsOpen={setIsMakeBidTransactionOpen}
             />
             <Snackbar
                 open={isRemoveBidOpen}

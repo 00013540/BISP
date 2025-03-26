@@ -34,6 +34,7 @@ export const getItems = async (
             duration: itemData.duration,
             type: itemData.type,
             isClaimAllowed: itemData.isClaimAllowed,
+            isTransactionAllowed: itemData.isTransactionAllowed,
         };
     });
 
