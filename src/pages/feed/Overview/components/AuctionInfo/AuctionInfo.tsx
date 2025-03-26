@@ -274,92 +274,73 @@ const AuctionInfo = ({ isAuctionExpired }: AuctionInfoProps) => {
                 )}
             </ParticipantWrapperStyled>
 
-            {!isEndedAuction && (
-                <>
-                    {data.ownerUid !== currentUser?.uid && (
-                        <>
-                            <Box
-                                display="flex"
-                                flexWrap="wrap"
-                                gap={4}
-                                mb={4}
-                                flexDirection={isMobile ? 'column' : 'row'}
+            <Box
+                display="flex"
+                flexWrap="wrap"
+                gap={4}
+                flexDirection={isMobile ? 'column' : 'row'}
+            >
+                {data?.ownerUid !== currentUser?.uid && (
+                    <>
+                        {!isAlreadyInFavorite ? (
+                            <Button
+                                loading={
+                                    isAddToFavoritePending || isUserLoading
+                                }
+                                startIcon={
+                                    <HeartSVG height="1rem" width="1rem" />
+                                }
+                                onClick={handleAddToFavorite}
                             >
-                                {!isAlreadyInFavorite ? (
-                                    <Button
-                                        loading={
-                                            isAddToFavoritePending ||
-                                            isUserLoading
-                                        }
-                                        startIcon={
-                                            <HeartSVG
-                                                height="1rem"
-                                                width="1rem"
-                                            />
-                                        }
-                                        onClick={handleAddToFavorite}
-                                    >
-                                        Add to favorite
-                                    </Button>
-                                ) : (
-                                    <Button
-                                        variant="outlined"
-                                        loading={
-                                            isRemoveFromFavoritePending ||
-                                            isUserLoading
-                                        }
-                                        startIcon={
-                                            <HeartFilledSVG
-                                                height="1rem"
-                                                width="1rem"
-                                            />
-                                        }
-                                        onClick={handleRemoveFromFavorite}
-                                    >
-                                        Remove from favorite
-                                    </Button>
-                                )}
-                                {canUserPlaceBid &&
-                                    !(
-                                        data.isTransactionAllowed &&
-                                        data.isClaimAllowed
-                                    ) && (
-                                        <>
-                                            {hasUserPlacedBid && (
-                                                <Button
-                                                    loading={isRemoveBidPending}
-                                                    color="error"
-                                                    variant="outlined"
-                                                    onClick={handleRemoveBid}
-                                                >
-                                                    Remove bid
-                                                </Button>
-                                            )}
-                                            <Button
-                                                onClick={() =>
-                                                    setIsBidDialogOpen(true)
-                                                }
-                                            >
-                                                {hasUserPlacedBid
-                                                    ? 'Update placed bid'
-                                                    : 'Place a bid'}
-                                            </Button>
-                                        </>
-                                    )}
-                            </Box>
-                            {!canUserPlaceBid && (
-                                <Typography
-                                    variant="h4"
-                                    color="text.highlight"
-                                    mb={2}
+                                Add to favorite
+                            </Button>
+                        ) : (
+                            <Button
+                                variant="outlined"
+                                loading={
+                                    isRemoveFromFavoritePending || isUserLoading
+                                }
+                                startIcon={
+                                    <HeartFilledSVG
+                                        height="1rem"
+                                        width="1rem"
+                                    />
+                                }
+                                onClick={handleRemoveFromFavorite}
+                            >
+                                Remove from favorite
+                            </Button>
+                        )}
+                    </>
+                )}
+                {!isEndedAuction &&
+                    canUserPlaceBid &&
+                    !(data.isTransactionAllowed && data.isClaimAllowed) &&
+                    data.ownerUid !== currentUser?.uid && (
+                        <>
+                            {hasUserPlacedBid && (
+                                <Button
+                                    loading={isRemoveBidPending}
+                                    color="error"
+                                    variant="outlined"
+                                    onClick={handleRemoveBid}
                                 >
-                                    Sorry, you cannot place a bid as another
-                                    user has already placed one.
-                                </Typography>
+                                    Remove bid
+                                </Button>
                             )}
+                            <Button onClick={() => setIsBidDialogOpen(true)}>
+                                {hasUserPlacedBid
+                                    ? 'Update placed bid'
+                                    : 'Place a bid'}
+                            </Button>
                         </>
                     )}
-                </>
+            </Box>
+            {!canUserPlaceBid && data.ownerUid !== currentUser?.uid && (
+                <Typography variant="h4" color="text.highlight" mb={2}>
+                    Sorry, you cannot place a bid as another user has already
+                    placed one.
+                </Typography>
             )}
 
             {data.ownerUid === currentUser?.uid && (
@@ -374,36 +355,38 @@ const AuctionInfo = ({ isAuctionExpired }: AuctionInfoProps) => {
                         mb={4}
                         flexDirection={isMobile ? 'column' : 'row'}
                     >
-                        {canOwnerAllowTransaction && !data.isClaimAllowed && (
-                            <>
-                                {!data.isTransactionAllowed ? (
-                                    <Button
-                                        loading={
-                                            isControlTransactionLoading ||
-                                            isDataFetching
-                                        }
-                                        onClick={() =>
-                                            handleControlTransaction(true)
-                                        }
-                                    >
-                                        Allow to make transaction
-                                    </Button>
-                                ) : (
-                                    <Button
-                                        variant="outlined"
-                                        loading={
-                                            isControlTransactionLoading ||
-                                            isDataFetching
-                                        }
-                                        onClick={() =>
-                                            handleControlTransaction(false)
-                                        }
-                                    >
-                                        Remove allowance to make transaction
-                                    </Button>
-                                )}
-                            </>
-                        )}
+                        {canOwnerAllowTransaction &&
+                            !data.isClaimAllowed &&
+                            currentBid > 0 && (
+                                <>
+                                    {!data.isTransactionAllowed ? (
+                                        <Button
+                                            loading={
+                                                isControlTransactionLoading ||
+                                                isDataFetching
+                                            }
+                                            onClick={() =>
+                                                handleControlTransaction(true)
+                                            }
+                                        >
+                                            Allow to make transaction
+                                        </Button>
+                                    ) : (
+                                        <Button
+                                            variant="outlined"
+                                            loading={
+                                                isControlTransactionLoading ||
+                                                isDataFetching
+                                            }
+                                            onClick={() =>
+                                                handleControlTransaction(false)
+                                            }
+                                        >
+                                            Remove allowance to make transaction
+                                        </Button>
+                                    )}
+                                </>
+                            )}
                         {data.status === ItemStatus.ACTIVE &&
                             data.isClaimAllowed && (
                                 <Button>Claim bid transaction</Button>
@@ -413,7 +396,7 @@ const AuctionInfo = ({ isAuctionExpired }: AuctionInfoProps) => {
             )}
 
             {isUserWonAuction && (
-                <Box>
+                <Box mt={4}>
                     <Typography variant="h3" color="text.highlight" mb={2}>
                         Congratulation you won in this auction
                     </Typography>
