@@ -28,6 +28,7 @@ import {
 } from './AuctionInfo.styled.ts';
 import { PlaceBidDialog } from '../PlaceBidDialog';
 import { MakeBidTransactionDialog } from '../MakeBidTransactionDialog';
+import { ClaimBidTransactionDialog } from '../ClaimBidTransactionDialog';
 import { AuctionInfoProps } from './AuctionInfo.types.ts';
 
 const AuctionInfo = ({ isAuctionExpired }: AuctionInfoProps) => {
@@ -120,6 +121,8 @@ const AuctionInfo = ({ isAuctionExpired }: AuctionInfoProps) => {
     const [isBidDialogOpen, setIsBidDialogOpen] = useState(false);
     const [isRemoveBidOpen, setIsRemoveBidOpen] = useState(false);
     const [isMakeBidTransactionOpen, setIsMakeBidTransactionOpen] =
+        useState(false);
+    const [isClaimBidTransactionOpen, setIsClaimBidTransactionOpen] =
         useState(false);
 
     const handleControlTransaction = (isTransactionAllowed: boolean) => {
@@ -336,12 +339,14 @@ const AuctionInfo = ({ isAuctionExpired }: AuctionInfoProps) => {
                         </>
                     )}
             </Box>
-            {!canUserPlaceBid && data.ownerUid !== currentUser?.uid && (
-                <Typography variant="h4" color="text.highlight" mb={2}>
-                    Sorry, you cannot place a bid as another user has already
-                    placed one.
-                </Typography>
-            )}
+            {data.status === ItemStatus.ACTIVE &&
+                !canUserPlaceBid &&
+                data.ownerUid !== currentUser?.uid && (
+                    <Typography variant="h4" color="text.highlight" mb={2}>
+                        Sorry, you cannot place a bid as another user has
+                        already placed one.
+                    </Typography>
+                )}
 
             {data.ownerUid === currentUser?.uid && (
                 <>
@@ -389,7 +394,13 @@ const AuctionInfo = ({ isAuctionExpired }: AuctionInfoProps) => {
                             )}
                         {data.status === ItemStatus.ACTIVE &&
                             data.isClaimAllowed && (
-                                <Button>Claim bid transaction</Button>
+                                <Button
+                                    onClick={() =>
+                                        setIsClaimBidTransactionOpen(true)
+                                    }
+                                >
+                                    Claim bid transaction
+                                </Button>
                             )}
                     </Box>
                 </>
@@ -441,6 +452,10 @@ const AuctionInfo = ({ isAuctionExpired }: AuctionInfoProps) => {
             <MakeBidTransactionDialog
                 isOpen={isMakeBidTransactionOpen}
                 setIsOpen={setIsMakeBidTransactionOpen}
+            />
+            <ClaimBidTransactionDialog
+                isOpen={isClaimBidTransactionOpen}
+                setIsOpen={setIsClaimBidTransactionOpen}
             />
             <Snackbar
                 open={isRemoveBidOpen}

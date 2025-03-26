@@ -58,3 +58,7 @@ export interface MakeBidTransactionData {
     toUser: string;
     amount: number;
 }
+
+export interface ClaimBidTransactionData {
+    refToItem: string;
+}

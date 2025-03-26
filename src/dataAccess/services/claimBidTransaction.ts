@@ -1,22 +1,15 @@
-import { doc, getDoc, updateDoc } from 'firebase/firestore';
+import { doc, updateDoc } from 'firebase/firestore';
 
 import { db } from '@/firebase';
 
-import { AddToFavoriteData, User } from '../types';
+import { ClaimBidTransactionData, ItemStatus } from '../types';
 
-export const addToFavorite = async (favoriteFeedData: AddToFavoriteData) => {
-    const userRef = doc(db, 'Users', favoriteFeedData.refToUserUid);
-    const userSnap = await getDoc(userRef);
-    const userData = userSnap.data() as User;
-    const favoriteFeeds = [
-        ...userData.favoriteFeeds,
-        favoriteFeedData.refToItem,
-    ];
+export const claimBidTransaction = async (data: ClaimBidTransactionData) => {
+    const itemRef = doc(db, 'Items', data.refToItem);
 
-    const updatedItem = {
-        favoriteFeeds,
-    };
-    await updateDoc(userRef, { ...updatedItem });
+    await updateDoc(itemRef, {
+        status: ItemStatus.CLAIMED,
+    });
 
-    return favoriteFeedData;
+    return data;
 };

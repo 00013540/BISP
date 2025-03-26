@@ -17,3 +17,4 @@ export * from './addToFavorite.ts';
 export * from './removeFromFavorite.ts';
 export * from './controlTransaction.ts';
 export * from './makeBidTransaction.ts';
+export * from './claimBidTransaction.ts';

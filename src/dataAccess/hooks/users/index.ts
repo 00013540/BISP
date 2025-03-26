@@ -4,3 +4,4 @@ export * from './useAddToFavorite.ts';
 export * from './useRemoveFromFavorite.ts';
 export * from './useControlTransaction.ts';
 export * from './useMakeBidTransaction.ts';
+export * from './useClaimBidTransaction.ts';
