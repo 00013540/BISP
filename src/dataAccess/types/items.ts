@@ -84,8 +84,15 @@ export interface CreateItemData {
     ownerPhone: string;
 }
 
-export interface UpdateItemData extends CreateItemData {
+export interface UpdateItemData {
     uid: string;
+    title: string;
+    description: string;
+    address: string;
+    image: string;
+    imageStoragePath: string;
+    category: string;
+    ownerUid: string;
 }
 
 export interface ActivateItemData {

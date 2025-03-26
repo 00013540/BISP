@@ -35,7 +35,6 @@ const Overview = () => {
         address: '',
         category: '',
         ownerUid: '',
-        ownerPhone: '',
     });
 
     const { currentUser } = useUser();
@@ -81,7 +80,6 @@ const Overview = () => {
                         status,
                         type,
                         ownerUid,
-                        ownerPhone,
                     }) => (
                         <Grid2 size={{ xs: 12, sm: 6, md: 4, lg: 3 }}>
                             <CustomCard
@@ -97,7 +95,6 @@ const Overview = () => {
                                 type={type}
                                 imageStoragePath={imageStoragePath}
                                 ownerUid={ownerUid}
-                                ownerPhone={ownerPhone}
                                 onDelete={handleDelete}
                                 onUpdate={handleUpdate}
                                 onActivate={handleActivate}
