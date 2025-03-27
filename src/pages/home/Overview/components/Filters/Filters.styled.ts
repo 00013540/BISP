@@ -3,6 +3,8 @@ import { Box, styled } from '@mui/material';
 export const FiltersWrapperStyled = styled(Box)(({ theme }) => ({
     display: 'flex',
     justifyContent: 'space-between',
+    gap: '1rem',
+    flexWrap: 'wrap',
     alignItems: 'center',
     backgroundColor: theme.palette.white,
     borderRadius: '1rem',

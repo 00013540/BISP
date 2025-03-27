@@ -2,11 +2,13 @@ import { styled } from '@mui/material';
 
 export const ListStyled = styled('ul')(({ theme }) => ({
     display: 'flex',
+    flexWrap: 'wrap',
     alignItems: 'center',
     listStyle: 'none',
     padding: 0,
     margin: 0,
-    gap: theme.spacing(7.5),
+    columnGap: theme.spacing(7.5),
+    rowGap: theme.spacing(2),
 
     [theme.breakpoints.down('sm')]: {
         gap: theme.spacing(4),

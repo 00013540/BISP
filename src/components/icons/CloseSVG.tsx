@@ -1,13 +1,14 @@
 import type { FC } from 'react';
-import type { TBaseIconProps } from './types';
+import type { TCloseSVGProps } from './types';
 
 import { useTheme } from '@mui/material';
 
-const CloseSVG: FC<TBaseIconProps> = ({
+const CloseSVG: FC<TCloseSVGProps> = ({
     style,
     fillColor,
     height = 24,
     width = 24,
+    onClick,
 }) => {
     const theme = useTheme();
 
@@ -19,6 +20,7 @@ const CloseSVG: FC<TBaseIconProps> = ({
             height={height}
             style={style}
             stroke={resolvedColor}
+            onClick={onClick}
             viewBox="0 0 16 16"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
