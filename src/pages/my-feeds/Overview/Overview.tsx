@@ -3,7 +3,7 @@ import { Grid2 } from '@mui/material';
 import { useSearchParams } from 'react-router';
 
 import { useGetItems } from '@/dataAccess/hooks';
-import { CustomCard } from '@/components/common';
+import { CustomCard, Loader } from '@/components/common';
 import { useUser } from '@/context/user-context';
 import { ItemStatus, UpdateItemData } from '@/dataAccess/types';
 
@@ -44,7 +44,7 @@ const Overview = () => {
     });
 
     const { currentUser } = useUser();
-    const { data } = useGetItems({
+    const { isLoading, data } = useGetItems({
         ownerUid: currentUser?.uid || null,
         status: status || null,
     });
@@ -77,49 +77,61 @@ const Overview = () => {
     };
 
     return (
-        <WrapperStyled>
-            <Filters
-                mb={4}
-                value={status}
-                setIsOpenCreateDialog={setIsOpenCreateDialog}
-                handleChangeStatus={handleChangeStatus}
-            />
-            <Grid2 container spacing={2}>
-                {data?.map(
-                    ({
-                        uid,
-                        title,
-                        description,
-                        category,
-                        address,
-                        image,
-                        imageStoragePath,
-                        status,
-                        type,
-                        ownerUid,
-                    }) => (
-                        <Grid2 size={{ xs: 12, sm: 6, md: 4, lg: 3 }}>
-                            <CustomCard
-                                hasActions
-                                key={uid}
-                                uid={uid}
-                                title={title}
-                                description={description}
-                                category={category}
-                                address={address}
-                                image={image}
-                                status={status}
-                                type={type}
-                                imageStoragePath={imageStoragePath}
-                                ownerUid={ownerUid}
-                                onDelete={handleDelete}
-                                onUpdate={handleUpdate}
-                                onActivate={handleActivate}
-                            />
-                        </Grid2>
-                    )
-                )}
-            </Grid2>
+        <WrapperStyled
+            sx={{
+                display: isLoading ? 'flex' : 'block',
+                alignItems: 'center',
+                justifyContent: 'center',
+            }}
+        >
+            {isLoading && <Loader size={60} />}
+            {!isLoading && (
+                <>
+                    <Filters
+                        mb={4}
+                        value={status}
+                        setIsOpenCreateDialog={setIsOpenCreateDialog}
+                        handleChangeStatus={handleChangeStatus}
+                    />
+                    <Grid2 container spacing={2}>
+                        {data?.map(
+                            ({
+                                uid,
+                                title,
+                                description,
+                                category,
+                                address,
+                                image,
+                                imageStoragePath,
+                                status,
+                                type,
+                                ownerUid,
+                            }) => (
+                                <Grid2 size={{ xs: 12, sm: 6, md: 4, lg: 3 }}>
+                                    <CustomCard
+                                        hasActions
+                                        key={uid}
+                                        uid={uid}
+                                        title={title}
+                                        description={description}
+                                        category={category}
+                                        address={address}
+                                        image={image}
+                                        status={status}
+                                        type={type}
+                                        imageStoragePath={imageStoragePath}
+                                        ownerUid={ownerUid}
+                                        onDelete={handleDelete}
+                                        onUpdate={handleUpdate}
+                                        onActivate={handleActivate}
+                                    />
+                                </Grid2>
+                            )
+                        )}
+                    </Grid2>
+                </>
+            )}
+
             <ActivateFeedDialog
                 isOpen={isOpenActivateDialog}
                 setIsOpen={setIsOpenActivateDialog}
