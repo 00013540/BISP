@@ -1,14 +1,14 @@
-import { useParams } from 'react-router';
+import { Navigate, useParams } from 'react-router';
 import { Grid2 } from '@mui/material';
 import { Timestamp } from 'firebase/firestore';
 
 import { useGetItem } from '@/dataAccess/hooks';
-import { ItemData } from '@/dataAccess/types';
+import { ItemData, ItemStatus } from '@/dataAccess/types';
 import { Loader } from '@/components/common';
 import { hasDurationPassed } from '@/utils';
 
-import { FeedInfo, AuctionInfo } from './components';
-import { WrapperStyled, ImageStyled } from './Overview.styled.ts';
+import { AuctionInfo, FeedInfo } from './components';
+import { ImageStyled, WrapperStyled } from './Overview.styled.ts';
 
 const Overview = () => {
     const { feedAddress } = useParams();
@@ -31,6 +31,9 @@ const Overview = () => {
                 justifyContent: 'center',
             }}
         >
+            {!isLoading && data.status === ItemStatus.NEW && (
+                <Navigate to={'/404'} replace={true} />
+            )}
             {isLoading && <Loader size={60} />}
             {!isLoading && (
                 <Grid2 container spacing={{ xs: 6, md: 12 }}>
