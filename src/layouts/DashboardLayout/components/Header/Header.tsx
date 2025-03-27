@@ -2,7 +2,7 @@ import type { FC } from 'react';
 import { IconButton } from '@mui/material';
 import { Link } from 'react-router';
 
-import { useIsMobile } from '@/hooks/useIsMobile';
+import { useIsMobile } from '@/hooks';
 import { HamburgerSVG } from '@/components/icons';
 import { BrandLogo } from '@/components/common';
 

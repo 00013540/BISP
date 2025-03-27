@@ -30,7 +30,6 @@ export enum ItemStatus {
     NEW = 'NEW',
     ACTIVE = 'ACTIVE',
     CLAIMED = 'CLAIMED',
-    DELETED = 'DELETED',
 }
 
 export interface IParticipant {

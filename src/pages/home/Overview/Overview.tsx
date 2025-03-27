@@ -1,21 +1,41 @@
-import { Button, Grid2 } from '@mui/material';
+import { useState } from 'react';
+import { useSearchParams } from 'react-router';
+import { Grid2 } from '@mui/material';
 
 import { ItemStatus } from '@/dataAccess/types';
 import { useGetItems } from '@/dataAccess/hooks';
 import { CustomCard } from '@/components/common';
 
-import { WrapperStyled, ContentWrapperStyled } from './Overview.styled.ts';
+import { Filters } from './components';
+import { WrapperStyled } from './Overview.styled.ts';
 
 const Overview = () => {
+    const [searchParams, setSearchParams] = useSearchParams();
+    const categoryParam = searchParams.get('category') || '';
+
+    const [category, setCategory] = useState(categoryParam);
+
     const { data } = useGetItems({
         status: ItemStatus.ACTIVE,
+        category: category || null,
     });
+
+    const handleChangeCategory = (newCategory: string) => {
+        setCategory(newCategory);
+        if (!newCategory) {
+            setSearchParams({});
+        } else {
+            setSearchParams({ category: newCategory });
+        }
+    };
 
     return (
         <WrapperStyled>
-            <ContentWrapperStyled mb={4}>
-                <Button>New feed</Button>
-            </ContentWrapperStyled>
+            <Filters
+                mb={4}
+                value={category}
+                handleChangeCategory={handleChangeCategory}
+            />
             <Grid2 container spacing={2}>
                 {data?.map(
                     ({

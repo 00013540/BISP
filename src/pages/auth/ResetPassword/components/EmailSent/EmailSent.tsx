@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box, Typography } from '@mui/material';
 
-import { useIsMobile } from '@/hooks/useIsMobile';
+import { useIsMobile } from '@/hooks';
 import { MailSVG } from '@/components/icons';
 
 import type { EmailSentProps } from './EmailSent.types';
