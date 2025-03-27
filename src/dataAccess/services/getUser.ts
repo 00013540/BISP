@@ -27,6 +27,9 @@ export const getUser = async (uid: string): Promise<UserData> => {
                 imageStoragePath: favoriteFeedData.imageStoragePath,
                 status: favoriteFeedData.status,
                 address: favoriteFeedData.address,
+                category: favoriteFeedData.category,
+                type: favoriteFeedData.type,
+                ownerUid: favoriteFeedData.ownerUid,
             };
         }
     );
@@ -44,6 +47,9 @@ export const getUser = async (uid: string): Promise<UserData> => {
             imageStoragePath: myBidData.imageStoragePath,
             status: myBidData.status,
             address: myBidData.address,
+            category: myBidData.category,
+            type: myBidData.type,
+            ownerUid: myBidData.ownerUid,
         };
     });
 

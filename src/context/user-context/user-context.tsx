@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router';
 import { User, onAuthStateChanged } from 'firebase/auth';
 
@@ -13,6 +13,7 @@ import {
 
 const UserContext = React.createContext<UserContextInterface>({
     currentUser: null,
+    favoriteItems: {},
     userLoggedIn: false,
     loading: true,
     refetch: () => {},
@@ -28,7 +29,19 @@ export const UserContextProvider = ({ children }: UserContextProviderProps) => {
     const [loading, setLoading] = useState(true);
     const [currentUser, setCurrentUser] = useState<null | UserData>(null);
 
-    const { data, refetch, isFetching } = useGetUser(userUid);
+    const { data, refetch, isLoading: isUserLoading } = useGetUser(userUid);
+
+    const favoriteItems = useMemo(() => {
+        return (
+            currentUser?.favoriteFeeds?.reduce(
+                (acc, cur) => ({
+                    ...acc,
+                    [cur.uid]: true,
+                }),
+                {}
+            ) || {}
+        );
+    }, [currentUser?.favoriteFeeds]);
 
     const clearUser = () => {
         setUserUid('');
@@ -62,9 +75,10 @@ export const UserContextProvider = ({ children }: UserContextProviderProps) => {
     }, [data]);
 
     const contextValue = {
+        favoriteItems,
         currentUser: currentUser,
         userLoggedIn: !!currentUser,
-        loading: loading || isFetching,
+        loading: loading || isUserLoading,
         refetch,
         clearUser,
     };

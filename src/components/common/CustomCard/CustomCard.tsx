@@ -1,8 +1,11 @@
-import { MouseEvent } from 'react';
+import { MouseEvent, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { Box, Button } from '@mui/material';
 
+import { useUser } from '@/context/user-context';
 import { ItemStatus, ItemType } from '@/dataAccess/types';
+import { HeartSVG, HeartFilledSVG } from '@/components/icons';
+import { useAddToFavorite, useRemoveFromFavorite } from '@/dataAccess/hooks';
 
 import { CustomCardProps } from './CustomCard.types.ts';
 import {
@@ -11,6 +14,7 @@ import {
     ImageStyled,
     TypographyStyled,
     WrapperStyled,
+    FavoriteWrapperStyled,
 } from './CustomCard.styled.ts';
 
 const CustomCard = ({
@@ -25,11 +29,26 @@ const CustomCard = ({
     category,
     ownerUid,
     hasActions,
+    showFavoriteIcon,
     onDelete,
     onUpdate,
     onActivate,
 }: CustomCardProps) => {
     const navigate = useNavigate();
+
+    const { currentUser, favoriteItems } = useUser();
+    const { mutate: mutateAddToFavorite } = useAddToFavorite();
+    const { mutate: mutateRemoveFromFavorite } = useRemoveFromFavorite();
+
+    const canControlFavorite = currentUser?.uid !== ownerUid;
+    const [isHeartFilled, setIsHeartFilled] = useState(false);
+
+    useEffect(() => {
+        if (currentUser) {
+            const isHeartFilledItem = favoriteItems[uid];
+            setIsHeartFilled(isHeartFilledItem);
+        }
+    }, [currentUser, favoriteItems, uid]);
 
     const handleNavigate = () => navigate(`/feed/${uid}`);
 
@@ -66,12 +85,44 @@ const CustomCard = ({
         }
     };
 
+    const handleFavorite = (e: MouseEvent<HTMLDivElement>) => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        if (isHeartFilled) {
+            setIsHeartFilled(false);
+            if (currentUser) {
+                mutateRemoveFromFavorite({
+                    refToUserUid: currentUser.uid,
+                    refToItem: uid,
+                });
+            }
+        } else {
+            setIsHeartFilled(true);
+            if (currentUser) {
+                mutateAddToFavorite({
+                    refToUserUid: currentUser.uid,
+                    refToItem: uid,
+                });
+            }
+        }
+    };
+
     return (
         <WrapperStyled onClick={handleNavigate}>
             <ChipStyled
                 label={type === ItemType.FIRST_BID ? 'First bid' : 'Auction'}
                 color="success"
             />
+            {showFavoriteIcon && canControlFavorite && (
+                <FavoriteWrapperStyled onClick={handleFavorite}>
+                    {isHeartFilled ? (
+                        <HeartFilledSVG height="1rem" width="1rem" />
+                    ) : (
+                        <HeartSVG height="1rem" width="1rem" />
+                    )}
+                </FavoriteWrapperStyled>
+            )}
             <ImageStyled src={image} alt="Image" />
             <ContentStyled>
                 <TypographyStyled variant="h5" color="text.primary" mb={1}>

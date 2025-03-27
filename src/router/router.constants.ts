@@ -13,6 +13,11 @@ export const routes = {
         path: '/my-feeds',
         title: 'My Feeds',
     },
+    MY_FAVORITES: {
+        id: 'my_favorites',
+        path: '/my-favorites',
+        title: 'My Favorites',
+    },
     LOGOUT: {
         id: 'logout',
         path: '/auth/sign-in',

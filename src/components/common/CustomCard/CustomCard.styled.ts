@@ -40,3 +40,16 @@ export const TypographyStyled = styled(Typography)(() => ({
     '-webkit-line-clamp': '1',
     '-webkit-box-orient': 'vertical',
 }));
+
+export const FavoriteWrapperStyled = styled(Box)(({ theme }) => ({
+    position: 'absolute',
+    top: '1rem',
+    right: '1rem',
+    height: '2rem',
+    width: '2rem',
+    borderRadius: '50%',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: theme.palette.white,
+}));

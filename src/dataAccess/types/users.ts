@@ -1,5 +1,5 @@
 import { DocumentReference } from 'firebase/firestore';
-import { ItemStatus } from './items.ts';
+import { ItemStatus, ItemType } from './items.ts';
 
 interface ItemData {
     uid: string;
@@ -9,6 +9,9 @@ interface ItemData {
     imageStoragePath: string;
     status: ItemStatus;
     address: string;
+    category: string;
+    type: ItemType;
+    ownerUid: string;
 }
 
 export interface User {

@@ -10,8 +10,11 @@ const MyFeedOverview = lazy(() => import('@/pages/feed/Overview/Overview.tsx'));
 const MyFeedsOverview = lazy(
     () => import('@/pages/my-feeds/Overview/Overview.tsx')
 );
+const MyFavoritesOverview = lazy(
+    () => import('@/pages/my-favorites/Overview/Overview.tsx')
+);
 
-const { HOME, MY_FEEDS, LOGOUT, FEED } = routes;
+const { HOME, MY_FEEDS, MY_FAVORITES, LOGOUT, FEED } = routes;
 
 const homeRoute: BaseRoute = {
     id: HOME.id,
@@ -36,6 +39,14 @@ const myFeedsRoute: BaseRoute = {
     component: MyFeedsOverview,
 };
 
+const myFavoritesRoute: BaseRoute = {
+    id: MY_FAVORITES.id,
+    path: MY_FAVORITES.path,
+    title: MY_FAVORITES.title,
+    icon: PortfolioSVG,
+    component: MyFavoritesOverview,
+};
+
 const logOutRoute: BaseRoute = {
     id: LOGOUT.id,
     path: LOGOUT.path,
@@ -47,5 +58,6 @@ export const dashboardRoutes = [
     homeRoute,
     feedRoute,
     myFeedsRoute,
+    myFavoritesRoute,
     logOutRoute,
 ];

@@ -11,6 +11,7 @@ export interface CustomCardProps {
     imageStoragePath: string;
     category: string;
     ownerUid: string;
+    showFavoriteIcon?: boolean;
     hasActions?: boolean;
     onDelete?: (uid: string, imageStoragePath: string) => void;
     onUpdate?: (data: UpdateItemData) => void;
