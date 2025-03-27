@@ -1,9 +1,9 @@
 import { useState } from 'react';
-import { Grid2 } from '@mui/material';
+import { Box, Grid2 } from '@mui/material';
 import { useSearchParams } from 'react-router';
 
 import { useGetItems } from '@/dataAccess/hooks';
-import { CustomCard, Loader } from '@/components/common';
+import { CustomCard, Loader, ZeroItemsLayout } from '@/components/common';
 import { useUser } from '@/context/user-context';
 import { ItemStatus, UpdateItemData } from '@/dataAccess/types';
 
@@ -43,11 +43,16 @@ const Overview = () => {
         ownerUid: '',
     });
 
-    const { currentUser } = useUser();
-    const { isLoading, data } = useGetItems({
-        ownerUid: currentUser?.uid || null,
-        status: status || null,
-    });
+    const { loading: isUserLoading, currentUser } = useUser();
+    const { isLoading: isItemsLoading, data } = useGetItems(
+        {
+            ownerUid: currentUser?.uid || null,
+            status: status || null,
+        },
+        {
+            enabled: !!currentUser?.uid,
+        }
+    );
 
     const handleChangeStatus = (newStatus: string) => {
         setStatus(newStatus as ItemStatus);
@@ -76,6 +81,8 @@ const Overview = () => {
         setIsOpenActivateDialog(true);
     };
 
+    const isLoading = isUserLoading || isItemsLoading;
+
     return (
         <WrapperStyled
             sx={{
@@ -84,7 +91,11 @@ const Overview = () => {
                 justifyContent: 'center',
             }}
         >
-            {isLoading && <Loader size={60} />}
+            {isLoading && (
+                <Box height="calc(100vh - 2rem)" width="100%">
+                    <Loader size={60} />
+                </Box>
+            )}
             {!isLoading && (
                 <>
                     <Filters
@@ -93,42 +104,54 @@ const Overview = () => {
                         setIsOpenCreateDialog={setIsOpenCreateDialog}
                         handleChangeStatus={handleChangeStatus}
                     />
-                    <Grid2 container spacing={2}>
-                        {data?.map(
-                            ({
-                                uid,
-                                title,
-                                description,
-                                category,
-                                address,
-                                image,
-                                imageStoragePath,
-                                status,
-                                type,
-                                ownerUid,
-                            }) => (
-                                <Grid2 size={{ xs: 12, sm: 6, md: 4, lg: 3 }}>
-                                    <CustomCard
-                                        hasActions
-                                        key={uid}
-                                        uid={uid}
-                                        title={title}
-                                        description={description}
-                                        category={category}
-                                        address={address}
-                                        image={image}
-                                        status={status}
-                                        type={type}
-                                        imageStoragePath={imageStoragePath}
-                                        ownerUid={ownerUid}
-                                        onDelete={handleDelete}
-                                        onUpdate={handleUpdate}
-                                        onActivate={handleActivate}
-                                    />
-                                </Grid2>
-                            )
-                        )}
-                    </Grid2>
+                    {data && data.length > 0 && (
+                        <Grid2 container spacing={2}>
+                            {data?.map(
+                                ({
+                                    uid,
+                                    title,
+                                    description,
+                                    category,
+                                    address,
+                                    image,
+                                    imageStoragePath,
+                                    status,
+                                    type,
+                                    ownerUid,
+                                }) => (
+                                    <Grid2
+                                        size={{ xs: 12, sm: 6, md: 4, lg: 3 }}
+                                    >
+                                        <CustomCard
+                                            hasActions
+                                            key={uid}
+                                            uid={uid}
+                                            title={title}
+                                            description={description}
+                                            category={category}
+                                            address={address}
+                                            image={image}
+                                            status={status}
+                                            type={type}
+                                            imageStoragePath={imageStoragePath}
+                                            ownerUid={ownerUid}
+                                            onDelete={handleDelete}
+                                            onUpdate={handleUpdate}
+                                            onActivate={handleActivate}
+                                        />
+                                    </Grid2>
+                                )
+                            )}
+                        </Grid2>
+                    )}
+                    {!data?.length && (
+                        <Box sx={{ mt: { xs: 30, sm: 40 } }}>
+                            <ZeroItemsLayout
+                                hint="Sorry, there is no data to show now."
+                                desc="No data is found."
+                            />
+                        </Box>
+                    )}
                 </>
             )}
 

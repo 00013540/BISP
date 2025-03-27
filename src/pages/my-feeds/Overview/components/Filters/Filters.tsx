@@ -1,4 +1,4 @@
-import { Button } from '@mui/material';
+import { Button, Grid2 } from '@mui/material';
 
 import { StatusFilters } from '@/components/common';
 
@@ -14,14 +14,31 @@ const Filters = ({
 }: FiltersProps) => {
     return (
         <FiltersWrapperStyled {...props}>
-            <StatusFilters
-                value={value}
-                onChange={handleChangeStatus}
-                options={OPTIONS}
-            />
-            <Button onClick={() => setIsOpenCreateDialog(true)}>
-                New feed
-            </Button>
+            <Grid2 width="100%" container spacing={4}>
+                <Grid2
+                    size={{ xs: 12, sm: 9, lg: 10 }}
+                    display="flex"
+                    alignItems="center"
+                >
+                    <StatusFilters
+                        value={value}
+                        onChange={handleChangeStatus}
+                        options={OPTIONS}
+                    />
+                </Grid2>
+                <Grid2
+                    size={{ xs: 12, sm: 3, lg: 2 }}
+                    display="flex"
+                    alignItems="center"
+                >
+                    <Button
+                        fullWidth
+                        onClick={() => setIsOpenCreateDialog(true)}
+                    >
+                        New feed
+                    </Button>
+                </Grid2>
+            </Grid2>
         </FiltersWrapperStyled>
     );
 };

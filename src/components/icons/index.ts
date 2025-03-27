@@ -16,3 +16,4 @@ export { default as TimerThinSVG } from './TimerThinSVG.tsx';
 export { default as LocationSVG } from './LocationSVG.tsx';
 export { default as HeartFilledSVG } from './HeartFilledSVG.tsx';
 export { default as HeartSVG } from './HeartSVG.tsx';
+export { default as EmptySVG } from './EmptySVG.tsx';

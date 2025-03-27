@@ -29,7 +29,13 @@ export const UserContextProvider = ({ children }: UserContextProviderProps) => {
     const [loading, setLoading] = useState(true);
     const [currentUser, setCurrentUser] = useState<null | UserData>(null);
 
-    const { data, refetch, isLoading: isUserLoading } = useGetUser(userUid);
+    const {
+        data,
+        refetch,
+        isLoading: isUserLoading,
+    } = useGetUser(userUid, {
+        enabled: !!userUid,
+    });
 
     const favoriteItems = useMemo(() => {
         return (
@@ -65,10 +71,6 @@ export const UserContextProvider = ({ children }: UserContextProviderProps) => {
         const unSubscribe = onAuthStateChanged(auth, initializeUser);
         return unSubscribe;
     }, []);
-
-    useEffect(() => {
-        if (userUid) refetch();
-    }, [userUid, refetch]);
 
     useEffect(() => {
         if (data) setCurrentUser(data);

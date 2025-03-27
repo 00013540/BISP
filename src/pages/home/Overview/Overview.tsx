@@ -1,10 +1,10 @@
 import { useMemo, useState } from 'react';
 import { useSearchParams } from 'react-router';
-import { Grid2 } from '@mui/material';
+import { Grid2, Box } from '@mui/material';
 
 import { debounce } from '@/utils';
 import { ItemStatus } from '@/dataAccess/types';
-import { CustomCard, Loader } from '@/components/common';
+import { CustomCard, Loader, ZeroItemsLayout } from '@/components/common';
 import { useGetCategories, useGetItems } from '@/dataAccess/hooks';
 
 import { Filters } from './components';
@@ -101,7 +101,11 @@ const Overview = () => {
                 justifyContent: 'center',
             }}
         >
-            {isLoading && <Loader size={60} />}
+            {isLoading && (
+                <Box height="calc(100vh - 2rem)" width="100%">
+                    <Loader size={60} />
+                </Box>
+            )}
             {!isLoading && (
                 <>
                     <Filters
@@ -112,42 +116,55 @@ const Overview = () => {
                         handleChangeCategory={handleChangeCategory}
                         handleChangeDebounceSearch={handleChangeDebounceSearch}
                     />
-                    <Grid2 container spacing={2}>
-                        {data?.map(
-                            (
-                                {
-                                    uid,
-                                    title,
-                                    description,
-                                    category,
-                                    address,
-                                    image,
-                                    imageStoragePath,
-                                    status,
-                                    type,
-                                    ownerUid,
-                                },
-                                index
-                            ) => (
-                                <Grid2 size={{ xs: 12, sm: 6, md: 4, lg: 3 }}>
-                                    <CustomCard
-                                        showFavoriteIcon
-                                        type={type}
-                                        key={`${uid}-${index}`}
-                                        uid={uid}
-                                        title={title}
-                                        description={description}
-                                        category={category}
-                                        address={address}
-                                        image={image}
-                                        status={status}
-                                        imageStoragePath={imageStoragePath}
-                                        ownerUid={ownerUid}
-                                    />
-                                </Grid2>
-                            )
-                        )}
-                    </Grid2>
+                    {data?.length > 0 && (
+                        <Grid2 container spacing={2}>
+                            {data?.map(
+                                (
+                                    {
+                                        uid,
+                                        title,
+                                        description,
+                                        category,
+                                        address,
+                                        image,
+                                        imageStoragePath,
+                                        status,
+                                        type,
+                                        ownerUid,
+                                    },
+                                    index
+                                ) => (
+                                    <Grid2
+                                        size={{ xs: 12, sm: 6, md: 4, lg: 3 }}
+                                    >
+                                        <CustomCard
+                                            showFavoriteIcon
+                                            type={type}
+                                            key={`${uid}-${index}`}
+                                            uid={uid}
+                                            title={title}
+                                            description={description}
+                                            category={category}
+                                            address={address}
+                                            image={image}
+                                            status={status}
+                                            imageStoragePath={imageStoragePath}
+                                            ownerUid={ownerUid}
+                                        />
+                                    </Grid2>
+                                )
+                            )}
+                        </Grid2>
+                    )}
+
+                    {!data?.length && (
+                        <Box sx={{ mt: { xs: 30, sm: 40 } }}>
+                            <ZeroItemsLayout
+                                hint="Sorry, there is no data to show now."
+                                desc="No data is found."
+                            />
+                        </Box>
+                    )}
                 </>
             )}
         </WrapperStyled>
