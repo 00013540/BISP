@@ -1,7 +1,7 @@
 import type { FC } from 'react';
 import { Fragment, useCallback, useState, useEffect } from 'react';
 import { useLocation, Link } from 'react-router';
-import { Collapse, Typography, Box } from '@mui/material';
+import { Collapse, Typography, Box, Button } from '@mui/material';
 
 import { RawRoute } from '@/router/router.types.ts';
 import { dashboardRoutes } from '@/router/dashboard';
@@ -24,7 +24,7 @@ let IS_INITIAL_LOAD = true;
 const PrimarySidebar: FC<PrimarySidebarProps> = ({ isOpen, closeSidebars }) => {
     const { pathname } = useLocation();
     const isTabletOrMobileView = useIsTabletOrMobile();
-    const { currentUser } = useUser();
+    const { loading: isUserLoading, currentUser, refetch } = useUser();
 
     const [activeRouteId, setActiveRouteId] = useState('/');
     const [nestedActiveRouteId, setNestedActiveRouteId] = useState('');
@@ -171,9 +171,16 @@ const PrimarySidebar: FC<PrimarySidebarProps> = ({ isOpen, closeSidebars }) => {
                 <Box padding={4} display="flex" justifyContent="center">
                     <TotalBalanceWrapperStyled>
                         <Typography variant="body1">Total bids:</Typography>
-                        <Typography variant="h4" color="text.highlight">
+                        <Typography variant="h4" color="text.highlight" mb={2}>
                             {currentUser?.totalBids || 0}
                         </Typography>
+                        <Button
+                            loading={isUserLoading}
+                            size="medium"
+                            onClick={refetch}
+                        >
+                            Update
+                        </Button>
                     </TotalBalanceWrapperStyled>
                 </Box>
             </PrimarySidebarMenuWrapper>

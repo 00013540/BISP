@@ -181,7 +181,7 @@ export const TotalBalanceWrapperStyled = styled(Box)(({ theme }) => ({
     justifyContent: 'center',
     borderRadius: '0.5rem',
     border: `1px solid ${theme.palette.primary.main}`,
-    height: '80px',
+    height: '120px',
     width: '200px',
 
     [theme.breakpoints.down('sm')]: {
