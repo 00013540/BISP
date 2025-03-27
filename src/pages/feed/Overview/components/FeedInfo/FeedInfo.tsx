@@ -15,6 +15,22 @@ const FeedInfo = ({ isAuctionExpired }: FeedInfoProps) => {
 
     const data = rawData || ({} as ItemData);
 
+    const currentBid = data.participants.reduce((acc, cur) => {
+        const bidAmount = cur.placedBid;
+        if (acc > bidAmount) return acc;
+        return bidAmount;
+    }, 0);
+
+    const isTransactionStatusAvailable =
+        data.type === ItemType.AUCTION
+            ? isAuctionExpired &&
+              currentBid > 0 &&
+              (data.status === ItemStatus.ACTIVE ||
+                  data.status === ItemStatus.CLAIMED)
+            : currentBid > 0 &&
+              (data.status === ItemStatus.ACTIVE ||
+                  data.status === ItemStatus.CLAIMED);
+
     return (
         <>
             <Typography variant="body1" mb={3}>
@@ -41,6 +57,16 @@ const FeedInfo = ({ isAuctionExpired }: FeedInfoProps) => {
                     <Chip label="Claimed" color="success" size="medium" />
                 )}
             </Box>
+            {isTransactionStatusAvailable && (
+                <Box mb={3} display="flex" alignItems="center" gap={2}>
+                    <Typography variant="body1">Transaction status:</Typography>
+                    {data.isClaimAllowed ? (
+                        <Chip color="success" label="Done" />
+                    ) : (
+                        <Chip color="warning" label="Waiting" />
+                    )}
+                </Box>
+            )}
             <Box display="flex" alignItems="center" columnGap={1} mb={4}>
                 <LocationSVG height="1rem" width="1rem" />
                 <Typography variant="body1">{data.address}</Typography>

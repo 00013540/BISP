@@ -392,8 +392,10 @@ const AuctionInfo = ({ isAuctionExpired }: AuctionInfoProps) => {
                                     )}
                                 </>
                             )}
+
                         {data.status === ItemStatus.ACTIVE &&
-                            data.isClaimAllowed && (
+                            data.isClaimAllowed &&
+                            currentBid > 0 && (
                                 <Button
                                     onClick={() =>
                                         setIsClaimBidTransactionOpen(true)
@@ -433,6 +435,7 @@ const AuctionInfo = ({ isAuctionExpired }: AuctionInfoProps) => {
                             {!data.isClaimAllowed &&
                                 data.isTransactionAllowed && (
                                     <Button
+                                        fullWidth={isMobile}
                                         onClick={() =>
                                             setIsMakeBidTransactionOpen(true)
                                         }

@@ -5,7 +5,7 @@ import { Alert, Button, Grid2, Snackbar } from '@mui/material';
 
 import { getFormikError } from '@/utils';
 import { useUser } from '@/context/user-context';
-import { ItemData } from '@/dataAccess/types';
+import { ItemData, ItemType } from '@/dataAccess/types';
 import { useAddBid, useGetItem } from '@/dataAccess/hooks';
 import { CommonDialog } from '@/components/dialogs';
 import { CustomTextField } from '@/components/common';
@@ -41,6 +41,9 @@ const PlaceBidDialog = ({ isOpen, setIsOpen }: PlaceBidDialogProps) => {
         formik.resetForm();
     };
 
+    const isSubmitDisabled =
+        data.type === ItemType.FIRST_BID ? currentBid > 0 : false;
+
     const formik = useFormik({
         initialValues: defaultValues,
         validationSchema: getPlaceBidDialogSchema(
@@ -62,26 +65,41 @@ const PlaceBidDialog = ({ isOpen, setIsOpen }: PlaceBidDialogProps) => {
 
             if (!currentUser || !feedAddress || !values.bid) return;
 
-            if (currentNewestBid >= values.bid) {
+            if (
+                newestData.type === ItemType.FIRST_BID &&
+                currentNewestBid > 0
+            ) {
+                setFieldError(
+                    'bid',
+                    'Sorry, you cannot place a bid as another user has already placed one.'
+                );
+                return;
+            }
+
+            if (
+                newestData.type === ItemType.AUCTION &&
+                currentNewestBid >= values.bid
+            ) {
                 setFieldError(
                     'bid',
                     `Placed bid is less than or equal current bid ${currentNewestBid}`
                 );
-            } else {
-                mutate(
-                    {
-                        itemUid: feedAddress,
-                        refToUserUid: currentUser.uid,
-                        placedBid: values.bid,
-                    },
-                    {
-                        onSuccess: () => {
-                            handleClose();
-                            setOpenSuccessAlert(true);
-                        },
-                    }
-                );
+                return;
             }
+
+            mutate(
+                {
+                    itemUid: feedAddress,
+                    refToUserUid: currentUser.uid,
+                    placedBid: values.bid,
+                },
+                {
+                    onSuccess: () => {
+                        handleClose();
+                        setOpenSuccessAlert(true);
+                    },
+                }
+            );
         },
     });
 
@@ -122,6 +140,7 @@ const PlaceBidDialog = ({ isOpen, setIsOpen }: PlaceBidDialogProps) => {
                             <Button
                                 fullWidth
                                 loading={isLoading}
+                                disabled={isSubmitDisabled}
                                 variant="contained"
                                 type="submit"
                             >
