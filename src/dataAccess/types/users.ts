@@ -21,7 +21,6 @@ export interface User {
     imageStoragePath: string;
     totalBids: number;
     favoriteFeeds: DocumentReference[];
-    myFeeds: DocumentReference[];
     myBids: DocumentReference[];
 }
 
@@ -35,7 +34,6 @@ export interface UserData {
     imageStoragePath: string;
     totalBids: number;
     favoriteFeeds: ItemData[];
-    myFeeds: ItemData[];
     myBids: ItemData[];
 }
 

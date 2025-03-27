@@ -4,7 +4,7 @@ export const WrapperStyled = styled(Box)(({ theme }) => ({
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'space-between',
-    // height: '346px',
+    height: '100%',
     width: '100%',
     borderRadius: '1rem',
     padding: '0.5rem',

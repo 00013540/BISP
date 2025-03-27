@@ -1,12 +1,15 @@
 import { Button, Grid2 } from '@mui/material';
 
+import { ItemStatus } from '@/dataAccess/types';
 import { useGetItems } from '@/dataAccess/hooks';
 import { CustomCard } from '@/components/common';
 
 import { WrapperStyled, ContentWrapperStyled } from './Overview.styled.ts';
 
 const Overview = () => {
-    const { data } = useGetItems();
+    const { data } = useGetItems({
+        status: ItemStatus.ACTIVE,
+    });
 
     return (
         <WrapperStyled>

@@ -31,22 +31,6 @@ export const getUser = async (uid: string): Promise<UserData> => {
         }
     );
 
-    const myFeedsRequests = userData.myFeeds.map(async (myFeedRef) => {
-        const itemRef = doc(db, 'Items', myFeedRef as unknown as string);
-        const myFeedSnap = await getDoc(itemRef);
-        const myFeedData = myFeedSnap.data() as Item;
-
-        return {
-            uid: myFeedSnap.id,
-            title: myFeedData.title,
-            description: myFeedData.description,
-            image: myFeedData.image,
-            imageStoragePath: myFeedData.imageStoragePath,
-            status: myFeedData.status,
-            address: myFeedData.address,
-        };
-    });
-
     const myBidsRequests = userData.myBids.map(async (myBidRef) => {
         const itemRef = doc(db, 'Items', myBidRef as unknown as string);
         const myBidSnap = await getDoc(itemRef);
@@ -64,7 +48,6 @@ export const getUser = async (uid: string): Promise<UserData> => {
     });
 
     const favoriteFeedsParsed = await Promise.all(favoriteFeedsRequests);
-    const myFeedsParsed = await Promise.all(myFeedsRequests);
     const myBidsParsed = await Promise.all(myBidsRequests);
 
     return {
@@ -77,7 +60,6 @@ export const getUser = async (uid: string): Promise<UserData> => {
         imageStoragePath: userData.imageStoragePath,
         totalBids: userData.totalBids,
         favoriteFeeds: favoriteFeedsParsed,
-        myFeeds: myFeedsParsed,
         myBids: myBidsParsed,
     };
 };

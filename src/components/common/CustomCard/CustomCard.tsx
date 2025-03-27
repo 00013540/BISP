@@ -85,7 +85,7 @@ const CustomCard = ({
                 </TypographyStyled>
                 {hasActions && (
                     <Box display="flex" flexWrap="nowrap" columnGap={2}>
-                        {status !== ItemStatus.ACTIVE && (
+                        {status !== ItemStatus.CLAIMED && (
                             <Button
                                 size="medium"
                                 variant="outlined"
@@ -95,15 +95,18 @@ const CustomCard = ({
                                 Delete
                             </Button>
                         )}
-                        <Button
-                            size="medium"
-                            variant="outlined"
-                            color="primary"
-                            onClick={handleUpdate}
-                        >
-                            Update
-                        </Button>
-                        {status !== ItemStatus.ACTIVE && (
+                        {status !== ItemStatus.CLAIMED && (
+                            <Button
+                                size="medium"
+                                variant="outlined"
+                                color="primary"
+                                onClick={handleUpdate}
+                            >
+                                Update
+                            </Button>
+                        )}
+
+                        {status === ItemStatus.NEW && (
                             <Button
                                 size="medium"
                                 variant="contained"

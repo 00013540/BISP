@@ -1,20 +1,26 @@
 import { useState } from 'react';
-import { Button, Grid2 } from '@mui/material';
+import { Grid2 } from '@mui/material';
+import { useSearchParams } from 'react-router';
 
-import { UpdateItemData } from '@/dataAccess/types';
 import { useGetItems } from '@/dataAccess/hooks';
 import { CustomCard } from '@/components/common';
+import { useUser } from '@/context/user-context';
+import { ItemStatus, UpdateItemData } from '@/dataAccess/types';
 
 import {
     ActivateFeedDialog,
     CreateFeedDialog,
     UpdateFeedDialog,
     DeleteFeedDialog,
+    Filters,
 } from './components';
-import { WrapperStyled, ContentWrapperStyled } from './Overview.styled.ts';
-import { useUser } from '@/context/user-context';
+import { WrapperStyled } from './Overview.styled.ts';
 
 const Overview = () => {
+    const [searchParams, setSearchParams] = useSearchParams();
+    const statusParam = searchParams.get('status')?.toUpperCase() || '';
+
+    const [status, setStatus] = useState(statusParam);
     const [isOpenActivateDialog, setIsOpenActivateDialog] = useState(false);
     const [isOpenCreateDialog, setIsOpenCreateDialog] = useState(false);
     const [isOpenUpdateDialog, setIsOpenUpdateDialog] = useState(false);
@@ -40,7 +46,17 @@ const Overview = () => {
     const { currentUser } = useUser();
     const { data } = useGetItems({
         ownerUid: currentUser?.uid || null,
+        status: status || null,
     });
+
+    const handleChangeStatus = (newStatus: string) => {
+        setStatus(newStatus as ItemStatus);
+        if (!newStatus) {
+            setSearchParams({});
+        } else {
+            setSearchParams({ status: newStatus });
+        }
+    };
 
     const handleDelete = (uid: string, imageStoragePath: string) => {
         setDeleteData({
@@ -62,11 +78,12 @@ const Overview = () => {
 
     return (
         <WrapperStyled>
-            <ContentWrapperStyled mb={4}>
-                <Button onClick={() => setIsOpenCreateDialog(true)}>
-                    New feed
-                </Button>
-            </ContentWrapperStyled>
+            <Filters
+                mb={4}
+                value={status}
+                setIsOpenCreateDialog={setIsOpenCreateDialog}
+                handleChangeStatus={handleChangeStatus}
+            />
             <Grid2 container spacing={2}>
                 {data?.map(
                     ({

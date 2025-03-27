@@ -11,7 +11,6 @@ export class UserConstructor {
     imageStoragePath: string;
     totalBids: number;
     favoriteFeeds: DocumentReference[];
-    myFeeds: DocumentReference[];
     myBids: DocumentReference[];
 
     constructor(userData: Partial<IUser>) {
@@ -24,7 +23,6 @@ export class UserConstructor {
         this.imageStoragePath = userData.imageStoragePath || '';
         this.totalBids = userData.totalBids || 20;
         this.favoriteFeeds = userData.favoriteFeeds || [];
-        this.myFeeds = userData.myFeeds || [];
         this.myBids = userData.myBids || [];
     }
 }
