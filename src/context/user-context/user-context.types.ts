@@ -6,6 +6,7 @@ export interface UserContextInterface {
     currentUser: null | UserData;
     userLoggedIn: boolean;
     loading: boolean;
+    isFetching: boolean;
     clearUser: () => void;
     refetch: () => void;
 }

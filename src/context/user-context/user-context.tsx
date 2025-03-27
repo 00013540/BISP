@@ -16,6 +16,7 @@ const UserContext = React.createContext<UserContextInterface>({
     favoriteItems: {},
     userLoggedIn: false,
     loading: true,
+    isFetching: false,
     refetch: () => {},
     clearUser: () => {},
 });
@@ -33,6 +34,7 @@ export const UserContextProvider = ({ children }: UserContextProviderProps) => {
         data,
         refetch,
         isLoading: isUserLoading,
+        isFetching,
     } = useGetUser(userUid, {
         enabled: !!userUid,
     });
@@ -81,6 +83,7 @@ export const UserContextProvider = ({ children }: UserContextProviderProps) => {
         currentUser: currentUser,
         userLoggedIn: !!currentUser,
         loading: loading || isUserLoading,
+        isFetching,
         refetch,
         clearUser,
     };

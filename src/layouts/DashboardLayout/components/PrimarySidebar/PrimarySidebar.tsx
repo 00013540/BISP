@@ -24,7 +24,7 @@ let IS_INITIAL_LOAD = true;
 const PrimarySidebar: FC<PrimarySidebarProps> = ({ isOpen, closeSidebars }) => {
     const { pathname } = useLocation();
     const isTabletOrMobileView = useIsTabletOrMobile();
-    const { loading: isUserLoading, currentUser, refetch } = useUser();
+    const { isFetching: isUserLoading, currentUser, refetch } = useUser();
 
     const [activeRouteId, setActiveRouteId] = useState('/');
     const [nestedActiveRouteId, setNestedActiveRouteId] = useState('');
