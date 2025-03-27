@@ -1,12 +1,13 @@
 import type { FC } from 'react';
 import { Fragment, useCallback, useState, useEffect } from 'react';
 import { useLocation, Link } from 'react-router';
-import { Collapse } from '@mui/material';
+import { Collapse, Typography, Box } from '@mui/material';
 
 import { RawRoute } from '@/router/router.types.ts';
 import { dashboardRoutes } from '@/router/dashboard';
-import { useIsTabletOrMobile } from '@/hooks/useIsTabletOrMobile';
+import { useUser } from '@/context/user-context';
 import { BrandLogo } from '@/components/common';
+import { useIsTabletOrMobile } from '@/hooks';
 
 import type { PrimarySidebarProps } from './PrimarySidebar.types';
 import { PrimarySidebarButton } from '../PrimarySidebarButton';
@@ -15,6 +16,7 @@ import {
     PrimarySidebarContainer,
     PrimarySidebarMenuWrapper,
     PrimarySidebarHeaderWrapper,
+    TotalBalanceWrapperStyled,
 } from './PrimarySidebar.styled';
 
 let IS_INITIAL_LOAD = true;
@@ -22,6 +24,7 @@ let IS_INITIAL_LOAD = true;
 const PrimarySidebar: FC<PrimarySidebarProps> = ({ isOpen, closeSidebars }) => {
     const { pathname } = useLocation();
     const isTabletOrMobileView = useIsTabletOrMobile();
+    const { currentUser } = useUser();
 
     const [activeRouteId, setActiveRouteId] = useState('/');
     const [nestedActiveRouteId, setNestedActiveRouteId] = useState('');
@@ -105,63 +108,74 @@ const PrimarySidebar: FC<PrimarySidebarProps> = ({ isOpen, closeSidebars }) => {
                 </PrimarySidebarHeaderWrapper>
             )}
             <PrimarySidebarMenuWrapper>
-                {dashboardRoutes.map((route) =>
-                    route.hideInSidebar ? null : (
-                        <Fragment key={route.id}>
-                            {route.children?.length ? (
-                                <>
+                <Box>
+                    {dashboardRoutes.map((route) =>
+                        route.hideInSidebar ? null : (
+                            <Fragment key={route.id}>
+                                {route.children?.length ? (
+                                    <>
+                                        <PrimarySidebarButton
+                                            collapsable
+                                            isCollapseOpen={
+                                                activeCollapseId === route.id
+                                            }
+                                            id={route.id}
+                                            key={`sidebar_category_${route.id}`}
+                                            name={route.title}
+                                            className={`${isActiveRoute(route) && 'active'} isParentRoute`}
+                                            icon={route.icon}
+                                            updateActiveCollapseId={
+                                                updateActiveCollapseId
+                                            }
+                                        />
+                                        <Collapse
+                                            in={activeCollapseId === route.id}
+                                            timeout="auto"
+                                            unmountOnExit
+                                        >
+                                            {route.children.map(
+                                                (nestedRoute) =>
+                                                    nestedRoute.hideInSidebar ? null : (
+                                                        <PrimarySidebarButton
+                                                            id={nestedRoute.id}
+                                                            key={`sidebar_link_${nestedRoute.id}`}
+                                                            name={route.title}
+                                                            to={`${nestedRoute.path}`}
+                                                            className={`${isNestedActiveRoute(nestedRoute) && 'active'} isNestedRoute`}
+                                                            closeSidebars={
+                                                                closeSidebars
+                                                            }
+                                                        />
+                                                    )
+                                            )}
+                                        </Collapse>
+                                    </>
+                                ) : (
                                     <PrimarySidebarButton
-                                        collapsable
-                                        isCollapseOpen={
-                                            activeCollapseId === route.id
-                                        }
                                         id={route.id}
                                         key={`sidebar_category_${route.id}`}
                                         name={route.title}
-                                        className={`${isActiveRoute(route) && 'active'} isParentRoute`}
+                                        to={`${route.path}`}
                                         icon={route.icon}
+                                        className={`${isActiveRoute(route) && 'active'}`}
+                                        closeSidebars={closeSidebars}
                                         updateActiveCollapseId={
                                             updateActiveCollapseId
                                         }
                                     />
-                                    <Collapse
-                                        in={activeCollapseId === route.id}
-                                        timeout="auto"
-                                        unmountOnExit
-                                    >
-                                        {route.children.map((nestedRoute) =>
-                                            nestedRoute.hideInSidebar ? null : (
-                                                <PrimarySidebarButton
-                                                    id={nestedRoute.id}
-                                                    key={`sidebar_link_${nestedRoute.id}`}
-                                                    name={route.title}
-                                                    to={`${nestedRoute.path}`}
-                                                    className={`${isNestedActiveRoute(nestedRoute) && 'active'} isNestedRoute`}
-                                                    closeSidebars={
-                                                        closeSidebars
-                                                    }
-                                                />
-                                            )
-                                        )}
-                                    </Collapse>
-                                </>
-                            ) : (
-                                <PrimarySidebarButton
-                                    id={route.id}
-                                    key={`sidebar_category_${route.id}`}
-                                    name={route.title}
-                                    to={`${route.path}`}
-                                    icon={route.icon}
-                                    className={`${isActiveRoute(route) && 'active'}`}
-                                    closeSidebars={closeSidebars}
-                                    updateActiveCollapseId={
-                                        updateActiveCollapseId
-                                    }
-                                />
-                            )}
-                        </Fragment>
-                    )
-                )}
+                                )}
+                            </Fragment>
+                        )
+                    )}
+                </Box>
+                <Box padding={4} display="flex" justifyContent="center">
+                    <TotalBalanceWrapperStyled>
+                        <Typography variant="body1">Total bids:</Typography>
+                        <Typography variant="h4" color="text.highlight">
+                            {currentUser?.totalBids || 0}
+                        </Typography>
+                    </TotalBalanceWrapperStyled>
+                </Box>
             </PrimarySidebarMenuWrapper>
         </PrimarySidebarContainer>
     );

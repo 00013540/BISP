@@ -118,6 +118,10 @@ export const PrimarySidebarHeaderWrapper = styled(Box)(() => ({
 }));
 
 export const PrimarySidebarMenuWrapper = styled(List)(({ theme }) => ({
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+    rowGap: '1rem',
     maxHeight: `calc(100vh - ${SIDEBAR_HEADER_HEIGHT}px)`,
     height: '100%',
     padding: 0,
@@ -166,6 +170,21 @@ export const PrimarySidebarContainer = styled(Paper, { shouldForwardProp })<{
         top: `${HEADER_HEIGHT_MOBILE}px`,
         left: isOpen ? 0 : '-100%',
         maxHeight: `calc(100vh - ${HEADER_HEIGHT_MOBILE}px)`,
+        width: '100%',
+    },
+}));
+
+export const TotalBalanceWrapperStyled = styled(Box)(({ theme }) => ({
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: '0.5rem',
+    border: `1px solid ${theme.palette.primary.main}`,
+    height: '80px',
+    width: '200px',
+
+    [theme.breakpoints.down('sm')]: {
         width: '100%',
     },
 }));
