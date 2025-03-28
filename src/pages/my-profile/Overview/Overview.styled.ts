@@ -15,6 +15,22 @@ export const WrapperStyled = styled(Box)(({ theme }) => ({
     },
 }));
 
+export const WrapperLoaderStyled = styled(Box)(({ theme }) => ({
+    width: '100%',
+    minHeight: 'calc(100vh - 4rem)',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+
+    [theme.breakpoints.down('lg')]: {
+        minHeight: 'calc(100vh - 5rem - 78px)',
+    },
+
+    [theme.breakpoints.down('sm')]: {
+        minHeight: 'calc(100vh - 3rem - 66px)',
+    },
+}));
+
 export const ImageStyled = styled('img')(() => ({
     width: '100%',
     height: '100%',

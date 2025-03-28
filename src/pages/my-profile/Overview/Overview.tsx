@@ -5,7 +5,11 @@ import { useUser } from '@/context/user-context';
 import { Loader } from '@/components/common';
 
 import { UpdateUserInfoDialog } from './components';
-import { WrapperStyled, ImageStyled } from './Overview.styled.ts';
+import {
+    WrapperStyled,
+    ImageStyled,
+    WrapperLoaderStyled,
+} from './Overview.styled.ts';
 
 const Overview = () => {
     const { currentUser, loading: isLoading } = useUser();
@@ -26,9 +30,9 @@ const Overview = () => {
     return (
         <WrapperStyled>
             {isLoading && (
-                <Box height="calc(100vh - 4rem)" width="100%">
+                <WrapperLoaderStyled>
                     <Loader size={60} />
-                </Box>
+                </WrapperLoaderStyled>
             )}
             {!isLoading && (
                 <Grid2 container spacing={10}>
