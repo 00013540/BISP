@@ -132,7 +132,7 @@ const CustomCard = ({
                     )}
                 </FavoriteWrapperStyled>
             )}
-            <ImageStyled src={image} alt="Image" />
+            <ImageStyled src={image || '/placeholder.jpg'} alt="Image" />
             <ContentStyled>
                 <TypographyStyled variant="h5" color="text.primary" mb={1}>
                     {title}

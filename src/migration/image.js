@@ -8,8 +8,8 @@ const __dirname = path.dirname(__filename);
 
 export const uploadImage = async () => {
     try {
-        const fileName = `${Date.now()}-${uuidv4()}-placeholder.png`;
-        const filePath = path.resolve(__dirname, 'placeholder.png');
+        const fileName = `${Date.now()}-${uuidv4()}-placeholder.jpg`;
+        const filePath = path.resolve(__dirname, 'placeholder.jpg');
         const imageStoragePath = `uploads/${fileName}`;
 
         const file = bucket.file(imageStoragePath);
