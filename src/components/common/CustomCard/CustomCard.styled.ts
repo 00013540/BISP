@@ -52,4 +52,5 @@ export const FavoriteWrapperStyled = styled(Box)(({ theme }) => ({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: theme.palette.white,
+    border: `1px solid ${theme.palette.primary.main}`,
 }));

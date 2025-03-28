@@ -358,7 +358,12 @@ const AuctionInfo = ({ isAuctionExpired }: AuctionInfoProps) => {
             {data.status === ItemStatus.ACTIVE &&
                 !canUserPlaceBid &&
                 data.ownerUid !== currentUser?.uid && (
-                    <Typography variant="h4" color="text.highlight" mb={2}>
+                    <Typography
+                        variant="h4"
+                        color="text.highlight"
+                        mb={2}
+                        mt={2}
+                    >
                         Sorry, you cannot place a bid as another user has
                         already placed one.
                     </Typography>
