@@ -21,7 +21,7 @@ const renderRoutes = (layout: ReactNode, routes: BaseRoute[]) => {
                         <Route
                             path={nestedRoute.path}
                             element={
-                                <Suspense fallback={<div>Loading</div>}>
+                                <Suspense fallback={null}>
                                     <Component />
                                 </Suspense>
                             }
@@ -36,7 +36,7 @@ const renderRoutes = (layout: ReactNode, routes: BaseRoute[]) => {
                     <Route
                         path={route.path}
                         element={
-                            <Suspense fallback={<div>Loading</div>}>
+                            <Suspense fallback={null}>
                                 <Component />
                             </Suspense>
                         }
@@ -58,7 +58,7 @@ const RoutesHandler = () => {
                 <Route
                     path="/404"
                     element={
-                        <Suspense fallback={<div>Loading</div>}>
+                        <Suspense fallback={null}>
                             <Page404 />
                         </Suspense>
                     }
