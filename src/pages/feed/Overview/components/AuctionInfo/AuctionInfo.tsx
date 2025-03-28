@@ -11,6 +11,7 @@ import {
     useGetItem,
     useRemoveBid,
     useRemoveFromFavorite,
+    useRemoveFromMyBids,
 } from '@/dataAccess/hooks';
 import { useUser } from '@/context/user-context';
 import {
@@ -48,6 +49,8 @@ const AuctionInfo = ({ isAuctionExpired }: AuctionInfoProps) => {
     } = useRemoveFromFavorite();
     const { isPending: isRemoveBidPending, mutate: mutateRemoveBid } =
         useRemoveBid();
+    const { isPending: isRemoveMyBidsPending, mutate: mutateRemoveFromMyBids } =
+        useRemoveFromMyBids();
     const { isFetching: isDataFetching, data: rawData } = useGetItem({
         uid: feedAddress || '',
     });
@@ -142,7 +145,17 @@ const AuctionInfo = ({ isAuctionExpired }: AuctionInfoProps) => {
             },
             {
                 onSuccess: () => {
-                    setIsRemoveBidOpen(true);
+                    mutateRemoveFromMyBids(
+                        {
+                            refToUserUid: currentUser.uid,
+                            refToItem: feedAddress,
+                        },
+                        {
+                            onSuccess: () => {
+                                setIsRemoveBidOpen(true);
+                            },
+                        }
+                    );
                 },
             }
         );
@@ -323,7 +336,10 @@ const AuctionInfo = ({ isAuctionExpired }: AuctionInfoProps) => {
                         <>
                             {hasUserPlacedBid && (
                                 <Button
-                                    loading={isRemoveBidPending}
+                                    loading={
+                                        isRemoveBidPending ||
+                                        isRemoveMyBidsPending
+                                    }
                                     color="error"
                                     variant="outlined"
                                     onClick={handleRemoveBid}

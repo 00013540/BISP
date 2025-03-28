@@ -124,3 +124,13 @@ export interface RemoveFromFavoriteData {
     refToUserUid: string;
     refToItem: string;
 }
+
+export interface AddToMyBidsData {
+    refToUserUid: string;
+    refToItem: string;
+}
+
+export interface RemoveFromMyBidsData {
+    refToUserUid: string;
+    refToItem: string;
+}

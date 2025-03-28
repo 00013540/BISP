@@ -6,3 +6,5 @@ export * from './useRemoveFromFavorite.ts';
 export * from './useControlTransaction.ts';
 export * from './useMakeBidTransaction.ts';
 export * from './useClaimBidTransaction.ts';
+export * from './useAddToMyBids.ts';
+export * from './useRemoveFromMyBids.ts';

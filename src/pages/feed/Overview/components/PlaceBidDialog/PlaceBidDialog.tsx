@@ -6,7 +6,7 @@ import { Alert, Button, Grid2, Snackbar } from '@mui/material';
 import { getFormikError } from '@/utils';
 import { useUser } from '@/context/user-context';
 import { ItemData, ItemType } from '@/dataAccess/types';
-import { useAddBid, useGetItem } from '@/dataAccess/hooks';
+import { useAddBid, useAddToMyBids, useGetItem } from '@/dataAccess/hooks';
 import { CommonDialog } from '@/components/dialogs';
 import { CustomTextField } from '@/components/common';
 
@@ -29,6 +29,8 @@ const PlaceBidDialog = ({ isOpen, setIsOpen }: PlaceBidDialogProps) => {
     });
     const { currentUser } = useUser();
     const { isPending, mutate } = useAddBid();
+    const { isPending: isPendingMyBids, mutate: mutateMyBids } =
+        useAddToMyBids();
     const data = rawData || ({} as ItemData);
     const currentBid = data.participants.reduce((acc, cur) => {
         const bidAmount = cur.placedBid;
@@ -95,15 +97,25 @@ const PlaceBidDialog = ({ isOpen, setIsOpen }: PlaceBidDialogProps) => {
                 },
                 {
                     onSuccess: () => {
-                        handleClose();
-                        setOpenSuccessAlert(true);
+                        mutateMyBids(
+                            {
+                                refToUserUid: currentUser.uid,
+                                refToItem: feedAddress,
+                            },
+                            {
+                                onSuccess: () => {
+                                    handleClose();
+                                    setOpenSuccessAlert(true);
+                                },
+                            }
+                        );
                     },
                 }
             );
         },
     });
 
-    const isLoading = isFetching || isPending;
+    const isLoading = isFetching || isPending || isPendingMyBids;
 
     return (
         <>
