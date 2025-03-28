@@ -90,7 +90,11 @@ const SignIn = () => {
                     {!!errorMessage && (
                         <FormLabel
                             error={!!errorMessage}
-                            sx={{ display: 'block', mb: 10, mt: -8 }}
+                            sx={{
+                                display: 'block',
+                                mb: 10,
+                                mt: { xs: -4, sm: -8 },
+                            }}
                         >
                             {errorMessage}
                         </FormLabel>
