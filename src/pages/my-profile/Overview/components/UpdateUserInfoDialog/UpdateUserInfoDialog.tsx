@@ -5,41 +5,32 @@ import { Grid2, Button, Snackbar, Alert } from '@mui/material';
 import { getFormikError } from '@/utils';
 import { CommonDialog } from '@/components/dialogs';
 import {
-    CustomTextField,
-    CustomSelect,
-    CustomImageUploader,
-} from '@/components/common';
-import {
-    useGetCategories,
+    useDeleteImage,
     useUpdateImage,
-    useUpdateItem,
+    useUpdateUser,
 } from '@/dataAccess/hooks';
+import { CustomTextField, CustomImageUploader } from '@/components/common';
 
-import { UpdateFeedDialogProps } from './UpdateFeedDialog.types.ts';
+import { UpdateUserInfoDialogProps } from './UpdateUserInfoDialog.types.ts';
 import {
     defaultValues,
-    getUpdateFeedDialogSchema,
-} from './UpdateFeedDialog.schema.ts';
+    getUpdateUserInfoDialogSchema,
+} from './UpdateUserInfoDialog.schema.ts';
 
-const UpdateFeedDialog = ({
+const UpdateUserInfoDialog = ({
     isOpen,
     setIsOpen,
     updateData,
-}: UpdateFeedDialogProps) => {
+}: UpdateUserInfoDialogProps) => {
     const [openSuccessAlert, setOpenSuccessAlert] = useState(false);
     const [uploadedImage, setUploadedImage] = useState<null | string | File>(
         null
     );
 
+    const { isPending: isPendingDeleteImage, mutate: mutateDeleteImage } =
+        useDeleteImage();
     const { isPending: isPendingImage, mutate: mutateImage } = useUpdateImage();
-    const { isPending: isPendingItem, mutate: mutateItem } = useUpdateItem();
-
-    const { data } = useGetCategories();
-    const categories =
-        data?.map((category) => ({
-            text: category.name,
-            value: category.name,
-        })) || [];
+    const { isPending: isPendingUser, mutate: mutateUser } = useUpdateUser();
 
     const handleClose = () => {
         setIsOpen(false);
@@ -54,20 +45,69 @@ const UpdateFeedDialog = ({
 
     const formik = useFormik({
         initialValues: defaultValues,
-        validationSchema: getUpdateFeedDialogSchema(),
+        validationSchema: getUpdateUserInfoDialogSchema(),
 
         onSubmit: async (values, { setSubmitting }) => {
-            if (typeof uploadedImage === 'string') {
-                mutateItem(
+            if (!uploadedImage) {
+                if (updateData.image && updateData.imageStoragePath) {
+                    mutateDeleteImage(updateData.imageStoragePath, {
+                        onSuccess: () => {
+                            mutateUser(
+                                {
+                                    uid: updateData.uid,
+                                    firstName: values.firstName,
+                                    lastName: values.lastName,
+                                    phoneNumber: values.phoneNumber,
+                                    image: '',
+                                    imageStoragePath: '',
+                                },
+                                {
+                                    onSuccess: () => {
+                                        setSubmitting(false);
+                                        handleClose();
+                                        setOpenSuccessAlert(true);
+                                    },
+                                    onError: () => {
+                                        setSubmitting(false);
+                                    },
+                                }
+                            );
+                        },
+                        onError: () => {
+                            setSubmitting(false);
+                        },
+                    });
+                } else {
+                    mutateUser(
+                        {
+                            uid: updateData.uid,
+                            firstName: values.firstName,
+                            lastName: values.lastName,
+                            phoneNumber: values.phoneNumber,
+                            image: '',
+                            imageStoragePath: '',
+                        },
+                        {
+                            onSuccess: () => {
+                                setSubmitting(false);
+                                handleClose();
+                                setOpenSuccessAlert(true);
+                            },
+                            onError: () => {
+                                setSubmitting(false);
+                            },
+                        }
+                    );
+                }
+            } else if (typeof uploadedImage === 'string') {
+                mutateUser(
                     {
                         uid: updateData.uid,
-                        title: values.title,
-                        description: values.description,
-                        address: values.address,
-                        image: updateData.image,
-                        imageStoragePath: updateData.imageStoragePath,
-                        category: values.category,
-                        ownerUid: updateData.ownerUid,
+                        firstName: values.firstName,
+                        lastName: values.lastName,
+                        phoneNumber: values.phoneNumber,
+                        image: updateData.image || '',
+                        imageStoragePath: updateData.imageStoragePath || '',
                     },
                     {
                         onSuccess: () => {
@@ -88,16 +128,14 @@ const UpdateFeedDialog = ({
                     },
                     {
                         onSuccess: ({ url, path }) => {
-                            mutateItem(
+                            mutateUser(
                                 {
                                     uid: updateData.uid,
-                                    title: values.title,
-                                    description: values.description,
-                                    address: values.address,
+                                    firstName: values.firstName,
+                                    lastName: values.lastName,
+                                    phoneNumber: values.phoneNumber,
                                     image: url,
                                     imageStoragePath: path,
-                                    category: values.category,
-                                    ownerUid: updateData.uid,
                                 },
                                 {
                                     onSuccess: () => {
@@ -121,21 +159,22 @@ const UpdateFeedDialog = ({
     });
 
     const isSubmittingForm =
-        isPendingImage || isPendingItem || formik.isSubmitting;
+        isPendingImage ||
+        isPendingDeleteImage ||
+        isPendingUser ||
+        formik.isSubmitting;
 
     useEffect(() => {
         if (isOpen) {
             if (updateData.image) setUploadedImage(updateData.image);
-            if (updateData.title)
-                formik.setFieldValue('title', updateData.title);
-            if (updateData.description)
-                formik.setFieldValue('description', updateData.description);
+            if (updateData.firstName)
+                formik.setFieldValue('firstName', updateData.firstName);
+            if (updateData.lastName)
+                formik.setFieldValue('lastName', updateData.lastName);
             if (updateData.image)
                 formik.setFieldValue('image', updateData.image);
-            if (updateData.address)
-                formik.setFieldValue('address', updateData.address);
-            if (updateData.category)
-                formik.setFieldValue('category', updateData.category);
+            if (updateData.phoneNumber)
+                formik.setFieldValue('phoneNumber', updateData.phoneNumber);
         }
     }, [isOpen, updateData]);
 
@@ -147,44 +186,36 @@ const UpdateFeedDialog = ({
                 onClose={handleClose}
                 isSubmitting={isSubmittingForm}
                 maxWidth={500}
-                title="Update Feed"
+                title="Update User Info"
             >
                 <form onSubmit={formik.handleSubmit}>
                     <CustomTextField
-                        name="title"
-                        value={formik.values.title}
+                        name="firstName"
+                        value={formik.values.firstName}
                         onChange={formik.handleChange}
-                        label="Title"
+                        label="First name"
                         sx={{ mb: 4 }}
-                        {...getFormikError(formik, 'title')}
+                        {...getFormikError(formik, 'firstName')}
                     />
                     <CustomTextField
-                        name="description"
-                        value={formik.values.description}
+                        name="lastName"
+                        value={formik.values.lastName}
                         onChange={formik.handleChange}
-                        label="Description"
+                        label="Last name"
                         sx={{ mb: 4 }}
-                        {...getFormikError(formik, 'description')}
+                        {...getFormikError(formik, 'lastName')}
                     />
                     <CustomTextField
-                        name="address"
-                        value={formik.values.address}
+                        name="phoneNumber"
+                        value={formik.values.phoneNumber}
                         onChange={formik.handleChange}
-                        label="Address"
+                        label="Phone number"
+                        placeholder="+998xxxxxxxxx"
                         sx={{ mb: 4 }}
-                        {...getFormikError(formik, 'address')}
-                    />
-                    <CustomSelect
-                        name="category"
-                        label="Category"
-                        value={formik.values.category}
-                        onChange={formik.handleChange}
-                        items={categories}
-                        sx={{ mb: 4 }}
-                        {...getFormikError(formik, 'category')}
+                        {...getFormikError(formik, 'phoneNumber')}
                     />
                     <CustomImageUploader
-                        label="Image of item"
+                        label="Photo of user"
                         value={uploadedImage}
                         setValue={setUploadedImage}
                         setFormikValue={handleFileChange}
@@ -227,11 +258,11 @@ const UpdateFeedDialog = ({
                     severity="success"
                     variant="filled"
                 >
-                    This feed updated successfully!
+                    User information updated successfully!
                 </Alert>
             </Snackbar>
         </>
     );
 };
 
-export default UpdateFeedDialog;
+export default UpdateUserInfoDialog;

@@ -135,7 +135,7 @@ const CreateFeedDialog = ({ isOpen, setIsOpen }: CreateFeedDialogProps) => {
                         {...getFormikError(formik, 'category')}
                     />
                     <CustomImageUploader
-                        label="Upload image of item"
+                        label="Image of item"
                         value={uploadedImage}
                         setValue={setUploadedImage}
                         setFormikValue={handleFileChange}

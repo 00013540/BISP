@@ -12,7 +12,7 @@ const HeartFilledSVG: FC<TCloseSVGProps> = ({
 }) => {
     const theme = useTheme();
 
-    const resolvedColor = fillColor || theme.palette.primary[6];
+    const resolvedColor = fillColor || theme.palette.secondary[5];
 
     return (
         <svg

@@ -18,6 +18,11 @@ export const routes = {
         path: '/my-favorites',
         title: 'My Favorites',
     },
+    MY_PROFILE: {
+        id: 'my_profile',
+        path: '/my-profile',
+        title: 'My Profile',
+    },
     LOGOUT: {
         id: 'logout',
         path: '/auth/sign-in',

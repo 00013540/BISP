@@ -1,6 +1,12 @@
 import { lazy } from 'react';
 
-import { MarketplaceSVG, PortfolioSVG, LogoutSVG } from '@/components/icons';
+import {
+    MarketplaceSVG,
+    PortfolioSVG,
+    LogoutSVG,
+    AccountSVG,
+    HeartSVG,
+} from '@/components/icons';
 
 import { BaseRoute } from './router.types.ts';
 import { routes } from './router.constants.ts';
@@ -13,8 +19,11 @@ const MyFeedsOverview = lazy(
 const MyFavoritesOverview = lazy(
     () => import('@/pages/my-favorites/Overview/Overview.tsx')
 );
+const MyProfileOverview = lazy(
+    () => import('@/pages/my-profile/Overview/Overview.tsx')
+);
 
-const { HOME, MY_FEEDS, MY_FAVORITES, LOGOUT, FEED } = routes;
+const { HOME, MY_FEEDS, MY_FAVORITES, MY_PROFILE, LOGOUT, FEED } = routes;
 
 const homeRoute: BaseRoute = {
     id: HOME.id,
@@ -43,8 +52,16 @@ const myFavoritesRoute: BaseRoute = {
     id: MY_FAVORITES.id,
     path: MY_FAVORITES.path,
     title: MY_FAVORITES.title,
-    icon: PortfolioSVG,
+    icon: HeartSVG,
     component: MyFavoritesOverview,
+};
+
+const myProfleRoute: BaseRoute = {
+    id: MY_PROFILE.id,
+    path: MY_PROFILE.path,
+    title: MY_PROFILE.title,
+    icon: AccountSVG,
+    component: MyProfileOverview,
 };
 
 const logOutRoute: BaseRoute = {
@@ -59,5 +76,6 @@ export const dashboardRoutes = [
     feedRoute,
     myFeedsRoute,
     myFavoritesRoute,
+    myProfleRoute,
     logOutRoute,
 ];

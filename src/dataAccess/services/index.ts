@@ -2,6 +2,7 @@ export * from './createCategory.ts';
 export * from './activateItem.ts';
 export * from './createItem.ts';
 export * from './createUser.ts';
+export * from './updateUser.ts';
 export * from './getUser.ts';
 export * from './getItems.ts';
 export * from './getItem.ts';

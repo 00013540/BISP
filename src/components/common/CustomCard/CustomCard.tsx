@@ -1,6 +1,6 @@
 import { MouseEvent, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
-import { Box, Button } from '@mui/material';
+import { Box, Button, useTheme } from '@mui/material';
 
 import { useUser } from '@/context/user-context';
 import { ItemStatus, ItemType } from '@/dataAccess/types';
@@ -34,6 +34,7 @@ const CustomCard = ({
     onUpdate,
     onActivate,
 }: CustomCardProps) => {
+    const theme = useTheme();
     const navigate = useNavigate();
 
     const { currentUser, favoriteItems } = useUser();
@@ -117,9 +118,17 @@ const CustomCard = ({
             {showFavoriteIcon && canControlFavorite && (
                 <FavoriteWrapperStyled onClick={handleFavorite}>
                     {isHeartFilled ? (
-                        <HeartFilledSVG height="1rem" width="1rem" />
+                        <HeartFilledSVG
+                            height="1rem"
+                            width="1rem"
+                            fillColor={theme.palette.primary[6]}
+                        />
                     ) : (
-                        <HeartSVG height="1rem" width="1rem" />
+                        <HeartSVG
+                            height="1rem"
+                            width="1rem"
+                            fillColor={theme.palette.primary[6]}
+                        />
                     )}
                 </FavoriteWrapperStyled>
             )}

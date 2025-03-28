@@ -48,6 +48,15 @@ export interface CreateUserData {
     phoneNumber: string;
 }
 
+export interface UpdateUserData {
+    uid: string;
+    firstName: string;
+    lastName: string;
+    phoneNumber: string;
+    image: string;
+    imageStoragePath: string;
+}
+
 export interface ControlTransactionData {
     refToItem: string;
     isTransactionAllowed: boolean;
