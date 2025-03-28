@@ -13,6 +13,11 @@ export const routes = {
         path: '/my-feeds',
         title: 'My Feeds',
     },
+    MY_BIDS: {
+        id: 'my_bids',
+        path: '/my-bids',
+        title: 'My Bids',
+    },
     MY_FAVORITES: {
         id: 'my_favorites',
         path: '/my-favorites',

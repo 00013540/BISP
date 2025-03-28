@@ -5,7 +5,8 @@ import {
     PortfolioSVG,
     LogoutSVG,
     AccountSVG,
-    HeartSVG,
+    ActivitiesSVG,
+    OfferingsSVG,
 } from '@/components/icons';
 
 import { BaseRoute } from './router.types.ts';
@@ -16,6 +17,9 @@ const MyFeedOverview = lazy(() => import('@/pages/feed/Overview/Overview.tsx'));
 const MyFeedsOverview = lazy(
     () => import('@/pages/my-feeds/Overview/Overview.tsx')
 );
+const MyBidsOverview = lazy(
+    () => import('@/pages/my-bids/Overview/Overview.tsx')
+);
 const MyFavoritesOverview = lazy(
     () => import('@/pages/my-favorites/Overview/Overview.tsx')
 );
@@ -23,7 +27,8 @@ const MyProfileOverview = lazy(
     () => import('@/pages/my-profile/Overview/Overview.tsx')
 );
 
-const { HOME, MY_FEEDS, MY_FAVORITES, MY_PROFILE, LOGOUT, FEED } = routes;
+const { HOME, MY_FEEDS, MY_BIDS, MY_FAVORITES, MY_PROFILE, LOGOUT, FEED } =
+    routes;
 
 const homeRoute: BaseRoute = {
     id: HOME.id,
@@ -48,15 +53,23 @@ const myFeedsRoute: BaseRoute = {
     component: MyFeedsOverview,
 };
 
+const myBidsRoute: BaseRoute = {
+    id: MY_BIDS.id,
+    path: MY_BIDS.path,
+    title: MY_BIDS.title,
+    icon: ActivitiesSVG,
+    component: MyBidsOverview,
+};
+
 const myFavoritesRoute: BaseRoute = {
     id: MY_FAVORITES.id,
     path: MY_FAVORITES.path,
     title: MY_FAVORITES.title,
-    icon: HeartSVG,
+    icon: OfferingsSVG,
     component: MyFavoritesOverview,
 };
 
-const myProfleRoute: BaseRoute = {
+const myProfileRoute: BaseRoute = {
     id: MY_PROFILE.id,
     path: MY_PROFILE.path,
     title: MY_PROFILE.title,
@@ -75,7 +88,8 @@ export const dashboardRoutes = [
     homeRoute,
     feedRoute,
     myFeedsRoute,
+    myBidsRoute,
     myFavoritesRoute,
-    myProfleRoute,
+    myProfileRoute,
     logOutRoute,
 ];
