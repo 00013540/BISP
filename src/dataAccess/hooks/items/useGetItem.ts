@@ -18,7 +18,7 @@ export const useGetItem = (
         queryKey: getItemKey(params),
         queryFn: () => getItem(params.uid),
         placeholderData: keepPreviousData,
-        // refetchInterval: 1000 * 10,
+        refetchInterval: 1000 * 5,
         ...queryOptions,
     });
 };

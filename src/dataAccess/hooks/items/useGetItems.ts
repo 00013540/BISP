@@ -18,6 +18,7 @@ export const useGetItems = (
         queryKey: getItemsKey(filters),
         queryFn: () => getItems(filters),
         placeholderData: keepPreviousData,
+        refetchInterval: 1000 * 5,
         ...queryOptions,
     });
 };
