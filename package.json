@@ -4,10 +4,10 @@
     "version": "0.0.0",
     "type": "module",
     "scripts": {
-        "dev": "vite --port 3001 --open",
+        "dev": "vite --port 3000 --open",
         "build": "tsc -b && vite build",
         "lint": "eslint .",
-        "preview": "vite preview",
+        "preview": "npm run build && vite preview",
         "format": "prettier --write ."
     },
     "dependencies": {
